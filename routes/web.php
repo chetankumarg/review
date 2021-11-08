@@ -14,10 +14,11 @@ use App\Http\Controllers\AuthController;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+// Route::get('/', function () {
+//     return view('welcome');
+// });
 
+Route::get('/',  'App\Http\Controllers\AuthController@index');
 
 Route::get('login', 'App\Http\Controllers\AuthController@index');
 Route::post('post-login', 'App\Http\Controllers\AuthController@postLogin'); 
