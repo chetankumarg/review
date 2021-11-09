@@ -17,10 +17,10 @@ class CreateMobileUsersTable extends Migration
             $table->id();
             $table->string('first_name', 100);
             $table->string('last_name', 100);
-            $table->string('password', 100);
-            $table->string('email', 100);
-            $table->string('otp', 100);
-            $table->string('phone_no', 100);
+            $table->string('password', 200);
+            $table->string('email', 200);
+            $table->string('otp', 100);           
+            $table->integer('phone_no');
             $table->string('active', 100);
             $table->timestamps();
         });
