@@ -29,17 +29,16 @@
         <!-- Outer Row -->
         <div class="row justify-content-center">
 
-            <div class="col-xl-10 col-lg-12 col-md-9">
+            <div class="col-xl-8 col-lg-8 col-md-6">
 
                 <div class="card o-hidden border-0 shadow-lg my-5">
                     <div class="card-body p-0">
                         <!-- Nested Row within Card Body -->
-                        <div class="row">
-                            <div class="col-lg-6 d-none d-lg-block bg-login-image"></div>
-                            <div class="col-lg-6">
+                        <div class="row">                            
+                            <div class="col-lg-12">
                                 <div class="p-5">
                                     <div class="text-center">
-                                        <h1 class="h4 text-gray-900 mb-4">Welcome Back!</h1>
+                                        <h1 class="h4 text-gray-900 mb-4">Welcome to Review App</h1>
                                     </div>
                                     <form action="{{url('post-login')}}" method="POST" id="logForm"> 
                                             {{ csrf_field() }} 
@@ -66,9 +65,7 @@
                                             <button class="btn btn-lg btn-primary btn-block btn-login text-uppercase font-weight-bold mb-2" type="submit">Login In</button>
                                             <!-- <div class="text-center">If you have an account?
                                             <a class="small" href="{{url('registration')}}">Login</a></div> -->
-                                    </form>
-                                    <hr>
-                                    
+                                    </form>                                  
                                 </div>
                             </div>
                         </div>
