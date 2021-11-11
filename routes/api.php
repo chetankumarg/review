@@ -17,3 +17,7 @@ use Illuminate\Support\Facades\Route;
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
+
+
+Route::post('mobileUser/create', 'App\Http\Controllers\ApiController@createUser');
+Route::post('mobileUser/otp_verification', 'App\Http\Controllers\ApiController@verifield_otp');
