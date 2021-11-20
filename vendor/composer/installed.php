@@ -6,7 +6,7 @@
     'aliases' => 
     array (
     ),
-    'reference' => '5a1a6d31e18cb6c4785b5fa6847979fd58db96fe',
+    'reference' => 'a05f20f75e2e14a17c66a7adf85e07de3d43beb4',
     'name' => 'laravel/laravel',
   ),
   'versions' => 
@@ -177,6 +177,15 @@
       array (
       ),
       'reference' => 'f056f1fe935d9ed86e698905a957334029899895',
+    ),
+    'firebase/php-jwt' => 
+    array (
+      'pretty_version' => 'v5.5.1',
+      'version' => '5.5.1.0',
+      'aliases' => 
+      array (
+      ),
+      'reference' => '83b609028194aa042ea33b5af2d41a7427de80e6',
     ),
     'fruitcake/laravel-cors' => 
     array (
@@ -472,7 +481,7 @@
       'aliases' => 
       array (
       ),
-      'reference' => '5a1a6d31e18cb6c4785b5fa6847979fd58db96fe',
+      'reference' => 'a05f20f75e2e14a17c66a7adf85e07de3d43beb4',
     ),
     'laravel/sail' => 
     array (
@@ -734,6 +743,15 @@
       array (
       ),
       'reference' => 'c814a05837f2edb0d1471d6e3f4ab3501ca3899a',
+    ),
+    'plivo/plivo-php' => 
+    array (
+      'pretty_version' => 'v4.15.0',
+      'version' => '4.15.0.0',
+      'aliases' => 
+      array (
+      ),
+      'reference' => '938e66513a384ecaf085f33cc86e09b8f57e9992',
     ),
     'psr/container' => 
     array (
