@@ -9,7 +9,7 @@
 docker-compose.override.yml
 Homestead.json
 Homestead.yaml
-npm-debug.log
 yarn-error.log
+npm-debug.log
 vendor/composer/*
 composer.lock

@@ -7,14 +7,36 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use DB;
 
+use Plivo\RestClient;
+// use Plivo\Resources\PHLO\PhloRestClient;
+// use Plivo\Exceptions\PlivoRestException;
+
 class ApiController extends Controller
 {
     
+   //function to send sms testing purpose...
+   public function send_testsms(){
+
+    $otp = mt_rand(1000,9999);
+    $client = new RestClient("MAZGMXNDEYOWJMZDG3ND","ODA2ZGM1MWFiYTk4Yjk5ZTM1YTM5OWQ2ZWQ0ZjIw");
+    // $client = new PhloRestClient("MAZGMXNDEYOWJMZDG3ND","ODA2ZGM1MWFiYTk4Yjk5ZTM1YTM5OWQ2ZWQ0ZjIw");
+    $response = $client->messages->create(
+        [  
+            "src" => "+919738432807",
+            "dst" => "+918861122509",
+            "text"  =>"Hi, Welcome to Review App, Your login one-time password is: $otp",
+         ]
+  );
+
+    header('Content-Type: application/json');
+    return json_encode($response);
+
+   }
 
    // function to create users though mobile api
    public function createUser(Request $request) {
     // logic to create a mobileUser record goes here 
-
+ 
     $user_mail_count = MobileUsers::where('email',$request->email)->count();
     $user_phone_count = MobileUsers::where('phone_no',$request->phone_no)->count();
         if(empty($request->first_name)){
@@ -49,6 +71,7 @@ class ApiController extends Controller
             ], 201);
         }
 
+
           $mobileUser = new MobileUsers;
           $mobileUser->first_name = $request->first_name;
           $mobileUser->last_name = $request->last_name;
@@ -62,6 +85,20 @@ class ApiController extends Controller
           $mobileUser->save();
          
           if($mobileUser){
+            $generatedotp = rand(100000,999999);
+
+            $to = "+919738432807";
+            $from = "+918861122509";
+            $message = "Dear Customer,".$generatedotp." is your one-time password (OTP).
+            Thank you,
+            Team Review.";
+            $sms = plivo_send_text($to, $message, $from);
+        
+            if(isset($sms['response']['error']) && !empty($sms['response']['error']) ){
+                return response()->json(['status'=>false ,'message' => $sms['response']['error']], 200);
+            } else {
+                return response()->json(['status'=>true ,'message' => 'Successfully send otp!'], 200);
+            }
                 return response()->json([
                     "status" => true,
                     "message" => "mobileUser record created"

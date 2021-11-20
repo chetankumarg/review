@@ -15,7 +15,7 @@ class AddPicChangePhoneToMobileUserTable extends Migration
     {
         Schema::table('mobile_users', function (Blueprint $table) {
             //
-            $table->string('picture',255)->nullable()->change();
+            $table->string('picture',255)->nullable();
             $table->string('first_name', 100)->nullable()->change();
             $table->string('last_name', 100)->nullable()->change();
             $table->string('active', 10)->nullable()->change();
