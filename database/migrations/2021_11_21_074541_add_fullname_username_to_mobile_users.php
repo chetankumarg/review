@@ -19,7 +19,7 @@ class AddFullnameUsernameToMobileUsers extends Migration
             $table->dropColumn('picture');
             $table->renameColumn('first_name', 'full_name');
             $table->string('user_name',200)->after('first_name');
-            $table->string('profile_picture',200)->after('phone_no')->nullable()->change();;
+            $table->string('profile_picture',200)->nullable()->change();;
         });
     }
 
