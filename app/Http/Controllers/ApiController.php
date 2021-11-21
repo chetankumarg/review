@@ -5,11 +5,30 @@ use App\Models\MobileUsers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Plivo\RestClient;
 use DB;
 
 class ApiController extends Controller
 {
     
+    //function to send sms testing purpose...
+   public function send_testsms(){
+
+    $otp = mt_rand(1000,9999);
+    $client = new RestClient("MAZGMXNDEYOWJMZDG3ND","ODA2ZGM1MWFiYTk4Yjk5ZTM1YTM5OWQ2ZWQ0ZjIw");
+    // $client = new PhloRestClient("MAZGMXNDEYOWJMZDG3ND","ODA2ZGM1MWFiYTk4Yjk5ZTM1YTM5OWQ2ZWQ0ZjIw");
+    $response = $client->messages->create(
+        [  
+            "src" => "+919738432807",
+            "dst" => "+918861122509",
+            "text"  =>"Hi, Welcome to Review App, Your login one-time password is: $otp"
+         ]
+  );
+
+    header('Content-Type: application/json');
+    return json_encode($response);
+
+   }
 
    // function to create users though mobile api
    public function createUser(Request $request) {
