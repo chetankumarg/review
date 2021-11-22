@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 use App\Models\MobileUsers;
+use App\Models\MobileAuthentication;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -33,18 +34,14 @@ class ApiController extends Controller
    // function to create users though mobile api
    public function createUser(Request $request) {
     // logic to create a mobileUser record goes here 
-
     $user_mail_count = MobileUsers::where('email',$request->email)->count();
     $user_phone_count = MobileUsers::where('phone_no',$request->phone_no)->count();
-        if(empty($request->first_name)){
+    $user_name_count = MobileUsers::where('user_name',$request->user_name)->count();
+
+        if(empty($request->full_name)){
             return response()->json([
                 "status" => false,
-                "message" => "first name is required"
-            ], 201);
-        }elseif(empty($request->password)){
-            return response()->json([
-                "status" => false,
-                "message" => "Password is required"
+                "message" => "full name is required"
             ], 201);
         }elseif(empty($request->email)){
             return response()->json([
@@ -66,17 +63,23 @@ class ApiController extends Controller
                 "status" => false,
                 "message" => "Phone number is already present"
             ], 201);
+        }elseif($user_name_count > 0){
+            return response()->json([
+                "status" => false,
+                "message" => "User-name already present, please try other one"
+            ], 201);
         }
 
           $mobileUser = new MobileUsers;
-          $mobileUser->first_name = $request->first_name;
-          $mobileUser->last_name = $request->last_name;
+          $mobileUser->full_name = $request->full_name;
+          $mobileUser->user_name = $request->user_name;
           $mobileUser->email = $request->email;
           $mobileUser->phone_no = $request->phone_no;
-          $mobileUser->otp =  mt_rand(1000,9999);
-          $mobileUser->password = Hash::make($request->password);
+        //  $mobileUser->otp =  mt_rand(1000,9999);
+          $mobileUser->otp =  "4857";
+          $mobileUser->password = Hash::make("1234512*");
           $mobileUser->active = 0;
-          $mobileUser->picture = "";
+          $mobileUser->profile_picture = "";
 
           $mobileUser->save();
          
@@ -111,5 +114,43 @@ class ApiController extends Controller
         ], 201);
     }
   }
+
+       // function to create users though mobile api
+       public function loginMobile(Request $request) {
+        $user_phone_count = MobileUsers::where('phone_no',$request->phone_no)->count();
+
+        if($user_phone_count == 0){
+            return response()->json([
+                "status" => false,
+                "message" => "Mobile number is not registered,please registered with the mobile number"
+            ], 201);
+        }else{
+            $mobile_otp_count = MobileAuthentication::where('phone_no',$request->phone_no)->count();
+            
+            if($mobile_otp_count == 0){
+                    $mobile_otp_User = new MobileAuthentication;
+                    $mobile_otp_User->phone_no = $request->phone_no;
+                    $mobile_otp_User->otp =  "1234";
+                    $mobile_otp_User->expired = "0";
+                    $mobile_otp_User->save();
+
+                    return response()->json([
+                        "status" => true,
+                        "message" => "otp is send to the register mobile number"
+                    ], 201);
+            }else{                
+                MobileAuthentication::where('phone_no',$request->phone_no)
+                        ->update(array(
+                                'otp'=> "1235",
+                                'expired'=> "0"
+                        ));  
+                        return response()->json([
+                            "status" => true,
+                            "message" => "otp is send to the register mobile number updated"
+                        ], 201);                
+            }
+
+        }
+     }   
 
 }

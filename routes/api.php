@@ -20,5 +20,9 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 
 
 Route::post('mobileUser/create', 'App\Http\Controllers\ApiController@createUser');
+
 Route::post('mobileUser/otp_verification', 'App\Http\Controllers\ApiController@verifield_otp');
+
+Route::post('mobileUser/mobilelogin', 'App\Http\Controllers\ApiController@loginMobile');
+
 Route::get('mobileUser/test_otpsms', 'App\Http\Controllers\ApiController@send_testsms');
