@@ -153,4 +153,37 @@ class ApiController extends Controller
         }
      }   
 
+     // function for the login verified_otp for the logins
+     public function loginverifield_otp(Request $request){
+
+        $user_otp_verification_count = MobileUsers::where('phone_no',$request->phone_no)->count();
+        $mobile_otp_count = MobileAuthentication::where('phone_no',$request->phone_no)->count();
+    
+        if($user_otp_verification_count == 1 && $mobile_otp_count == 1){
+
+            $mobile_otp_verification_count = MobileAuthentication::where('phone_no',$request->phone_no)->where('otp',$request->otp)->count();
+
+            if( $mobile_otp_verification_count == 1){
+                MobileAuthentication::where('phone_no',$request->phone_no)
+                ->update(array(
+                        'expired'=> "1"
+                ));  
+                return response()->json([
+                    "status" => true,
+                    "message" => "otp is correct"
+                ], 201);  
+            }else{
+                return response()->json([
+                    "status" => false,
+                    "message" => "otp is wrong"
+                ], 201); 
+            }
+        }else{
+            return response()->json([
+                "status" => false,
+                "message" => "Please Register and login then otp will be sent"
+            ], 201);
+        }
+      }
+
 }
