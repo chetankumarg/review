@@ -20,14 +20,30 @@ class ApiController extends Controller
     // $client = new PhloRestClient("MAZGMXNDEYOWJMZDG3ND","ODA2ZGM1MWFiYTk4Yjk5ZTM1YTM5OWQ2ZWQ0ZjIw");
     $response = $client->messages->create(
         [  
-            "src" => "+919738432807",
-            "dst" => "+918861122509",
+            "src" => "+918861122509",
+            "dst" => "+919738432807",
             "text"  =>"Hi, Welcome to Review App, Your login one-time password is: $otp"
          ]
   );
 
     header('Content-Type: application/json');
-    return json_encode($response);
+    return json_encode($response->statusCode);
+
+   }
+
+   public function send_sms($otp,$dest_no,$mess_text){
+
+    $client = new RestClient("MAZGMXNDEYOWJMZDG3ND","ODA2ZGM1MWFiYTk4Yjk5ZTM1YTM5OWQ2ZWQ0ZjIw");
+    $response = $client->messages->create(
+        [  
+            "src" => "+918861122509",
+            "dst" => $dest_no,
+            "text"  =>"$mess_text : $otp"
+         ]
+  );
+
+    header('Content-Type: application/json');
+    return json_encode($response->statusCode);
 
    }
 
@@ -69,14 +85,20 @@ class ApiController extends Controller
                 "message" => "User-name already present, please try other one"
             ], 201);
         }
+          $otp = mt_rand(1000,9999);
+
+         $mess_text = "Hi, Welcome to Review App, Your Mobile Verification one-time password is: ";
+
+         $mess_status = send_sms($otp,$request->phone_no,$mess_text);
+
+        if($mess_status == "202"){
 
           $mobileUser = new MobileUsers;
           $mobileUser->full_name = $request->full_name;
           $mobileUser->user_name = $request->user_name;
           $mobileUser->email = $request->email;
           $mobileUser->phone_no = $request->phone_no;
-        //  $mobileUser->otp =  mt_rand(1000,9999);
-          $mobileUser->otp =  "4857";
+          $mobileUser->otp =  $otp;
           $mobileUser->password = Hash::make("1234512*");
           $mobileUser->active = 0;
           $mobileUser->profile_picture = "";
@@ -94,6 +116,12 @@ class ApiController extends Controller
                     "message" => "mobileUser record not created"
                 ], 201);
             }
+        }else{
+            return response()->json([
+                "status" => false,
+                "message" => "SMS not send to destination phone no"
+            ], 201);
+        }    
   }
 
   public function verifield_otp(Request $request){
@@ -118,6 +146,8 @@ class ApiController extends Controller
        // function to create users though mobile api
        public function loginMobile(Request $request) {
         $user_phone_count = MobileUsers::where('phone_no',$request->phone_no)->count();
+        $otp = mt_rand(1000,9999);
+        $mess_text = "Hi, Welcome to Review App, Your Login one-time password is: ";
 
         if($user_phone_count == 0){
             return response()->json([
@@ -128,9 +158,13 @@ class ApiController extends Controller
             $mobile_otp_count = MobileAuthentication::where('phone_no',$request->phone_no)->count();
             
             if($mobile_otp_count == 0){
+                // First time login case.
+                $mess_status = send_sms($otp,$request->phone_no,$mess_text);
+                if($mess_status == "202"){
+
                     $mobile_otp_User = new MobileAuthentication;
                     $mobile_otp_User->phone_no = $request->phone_no;
-                    $mobile_otp_User->otp =  "1234";
+                    $mobile_otp_User->otp = $otp;
                     $mobile_otp_User->expired = "0";
                     $mobile_otp_User->save();
 
@@ -138,8 +172,17 @@ class ApiController extends Controller
                         "status" => true,
                         "message" => "otp is send to the register mobile number"
                     ], 201);
-            }else{                
-                MobileAuthentication::where('phone_no',$request->phone_no)
+                }else{
+                    return response()->json([
+                        "status" => false,
+                        "message" => "otp is not send to the register mobile number"
+                    ], 201);
+                }    
+            }else{   
+                // Login senorio for the second time
+                $mess_status = send_sms($otp,$request->phone_no,$mess_text);
+                if($mess_status == "202"){
+                    MobileAuthentication::where('phone_no',$request->phone_no)
                         ->update(array(
                                 'otp'=> "1235",
                                 'expired'=> "0"
@@ -147,7 +190,13 @@ class ApiController extends Controller
                         return response()->json([
                             "status" => true,
                             "message" => "otp is send to the register mobile number updated"
-                        ], 201);                
+                        ], 201);   
+                }else{
+                    return response()->json([
+                        "status" => false,
+                        "message" => "otp is not send to the register mobile number updated"
+                    ], 201); 
+                }                     
             }
 
         }
