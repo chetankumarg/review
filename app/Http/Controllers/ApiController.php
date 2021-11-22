@@ -47,6 +47,74 @@ class ApiController extends Controller
 
    }
 
+   // function for the existing of user_name and suggestion of user-names
+   public function check_username(Request $request){
+
+    $user_name_count = MobileUsers::where('user_name',$request->user_name)->count();
+
+    $suggestion_name = array();
+
+    if($user_name_count == 0){
+        return response()->json([
+            "status" => true,
+            "message" => "User-name is available you use it"
+        ], 201);
+    }else{
+
+        for($i = 0; $i < 3; $i++){
+            $full_name = $request->full_name;
+            $f_name = substr($full_name, 0 ,4) ."@". mt_rand(1000,9999);
+            $user_name_f_count = MobileUsers::where('user_name',$f_name)->count();
+            if(  $user_name_f_count == 0){
+                $suggestion_name[] = $f_name;
+            }else{
+                $i--;
+            }
+        }
+        return response()->json([
+            "status" => true,
+            "message" => "User-name suggestion",
+            "avaliable_username" => $suggestion_name
+        ], 201);
+    }
+   }
+
+   // function for checking the check_mobileno
+   public function check_mobileno(Request $request){
+    
+    $user_phone_count = MobileUsers::where('phone_no',$request->phone_no)->count();  
+        
+        if( $user_phone_count == 0){
+            return response()->json([
+                "status" => true,
+                "message" => "Mobile number is availabe"
+            ], 201);
+        }else{
+            return response()->json([
+                "status" => false,
+                "message" => "Mobile number is not availabe"
+            ], 201);
+        }
+   }
+
+    // function for checking the check_email
+    public function check_email(Request $request){
+    
+        $user_mail_count = MobileUsers::where('email',$request->email)->count();
+        if( $user_mail_count == 0){
+            return response()->json([
+                "status" => true,
+                "message" => "User Email is availabe"
+            ], 201);
+        }else{
+            return response()->json([
+                "status" => false,
+                "message" => "User Email is not availabe"
+            ], 201);
+        }
+    
+    }
+
    // function to create users though mobile api
    public function createUser(Request $request) {
     // logic to create a mobileUser record goes here 

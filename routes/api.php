@@ -26,5 +26,8 @@ Route::post('mobileUser/otp_verification', 'App\Http\Controllers\ApiController@v
 Route::post('mobileUser/mobilelogin', 'App\Http\Controllers\ApiController@loginMobile');
 
 Route::post('mobileUser/login_otp_verification', 'App\Http\Controllers\ApiController@loginverifield_otp');
+Route::post('mobileUser/check_username', 'App\Http\Controllers\ApiController@check_username');
+Route::post('mobileUser/check_mobileno', 'App\Http\Controllers\ApiController@check_mobileno');
+Route::post('mobileUser/check_email', 'App\Http\Controllers\ApiController@check_email');
 
 Route::get('mobileUser/test_otpsms', 'App\Http\Controllers\ApiController@send_testsms');
