@@ -26,3 +26,7 @@ Route::post('post-login', 'App\Http\Controllers\AuthController@postLogin');
 // Route::post('post-registration', 'App\Http\Controllers\AuthController@postRegistration'); 
 Route::get('dashboard', 'App\Http\Controllers\AuthController@dashboard'); 
 Route::get('logout', 'App\Http\Controllers\AuthController@logout');
+
+Route::get('/docs', function () {
+    return view('swagger.index');
+});
