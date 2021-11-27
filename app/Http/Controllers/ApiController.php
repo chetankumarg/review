@@ -55,9 +55,21 @@ class ApiController extends Controller
     $suggestion_name = array();
 
     if($user_name_count == 0){
+
+        for($i = 0; $i < 3; $i++){
+            $full_name = $request->full_name;
+            $f_name = substr($full_name, 0 ,4) ."@". mt_rand(1000,9999);
+            $user_name_f_count = MobileUsers::where('user_name',$f_name)->count();
+            if(  $user_name_f_count == 0){
+                $suggestion_name[] = $f_name;
+            }else{
+                $i--;
+            }
+        }
         return response()->json([
             "status" => true,
-            "message" => "User-name is available you use it"
+            "message" => "User-name is available you use along with it you can use other suggestion name",
+            "avaliable_username" => $suggestion_name
         ], 201);
     }else{
 
