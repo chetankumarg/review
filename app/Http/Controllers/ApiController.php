@@ -266,7 +266,7 @@ class ApiController extends Controller
                 if($mess_status == "202"){
                     MobileAuthentication::where('phone_no',$request->phone_no)
                         ->update(array(
-                                'otp'=> "1235",
+                                'otp'=> $otp,
                                 'expired'=> "0"
                         ));  
                         return response()->json([
@@ -316,5 +316,10 @@ class ApiController extends Controller
             ], 201);
         }
       }
+
+    // function for the resend otp for the registeration / login    
+    public function resend_otp(Request $request){
+
+    }  
 
 }

@@ -31,3 +31,4 @@ Route::post('mobileUser/check_mobileno', 'App\Http\Controllers\ApiController@che
 Route::post('mobileUser/check_email', 'App\Http\Controllers\ApiController@check_email');
 
 Route::get('mobileUser/test_otpsms', 'App\Http\Controllers\ApiController@send_testsms');
+Route::get('mobileUser/resend_otpsms', 'App\Http\Controllers\ApiController@resend_otp');
