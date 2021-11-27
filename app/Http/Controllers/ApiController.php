@@ -320,6 +320,56 @@ class ApiController extends Controller
     // function for the resend otp for the registeration / login    
     public function resend_otp(Request $request){
 
+        $mobile_number = $request->phone_no;
+        $otp_from = $request->otpfrom;
+
+        $user_phone_count = MobileUsers::where('phone_no',$request->phone_no)->count();
+
+        $mobile_otp_count = MobileAuthentication::where('phone_no',$request->phone_no)->count();
+
+        // otpfrom will be 1 or 2 , 1 means register ,2 means login
+        if($otp_from == 2){
+            $otp = mt_rand(1000,9999);
+            $mess_text = "Hi, Welcome to Review App, (Resend OTP) Your Login one-time password is: ";
+            
+            $mess_status = self::send_sms($otp,$request->phone_no,$mess_text);
+                if($mess_status == "202"){
+                    MobileAuthentication::where('phone_no',$request->phone_no)
+                        ->update(array(
+                                'otp'=> $otp,
+                                'expired'=> "0"
+                        ));  
+                        return response()->json([
+                            "status" => true,
+                            "otp_from"=> "login",
+                            "resend_otp_register" => false,
+                            "message" => "otp is send to the register mobile number updated"
+                        ], 201);   
+                }
+            
+        }elseif($otp_from == 1){
+
+            $otp = mt_rand(1000,9999);
+
+            $mess_text = "Hi, Welcome to Review App, Your Mobile Verification one-time password is: ";
+
+            $mess_status = self::send_sms($otp,$request->phone_no,$mess_text);
+
+            if($mess_status == "202"){
+                MobileUsers::where('phone_no',$request->phone_no)
+                    ->update(array(
+                            'otp'=> $otp
+                    ));  
+                    return response()->json([
+                        "status" => true,
+                        "otp_from"=> "register",
+                        "resend_otp_register" => true,
+                        "message" => "otp is send to the register mobile number updated"
+                    ], 201);   
+            }
+
+        }
+
     }  
 
 }
