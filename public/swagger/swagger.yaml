@@ -9,13 +9,29 @@ tags:
     description: Manage Category
 
 paths:
-  /categories:
+  # /categories:
+  #   get:
+  #     tags:
+  #       - Category
+  #     summary: Manage Category
+  #     description: 'Manage Category with this API'
+  #     operationId: category
+  #     consumes:
+  #       - application/json
+  #     produces:
+  #       - application/json
+  #     responses:
+  #       '200':
+  #         description: successful operation
+  #       '400':
+  #         description: Bad request
+  /mobileUser/test_otpsms:
     get:
       tags:
-        - Category
-      summary: Manage Category
-      description: 'Manage Category with this API'
-      operationId: category
+        - TestSMS
+      summary: SMS Testing
+      description: 'Testing the sms '
+      operationId: testsms
       consumes:
         - application/json
       produces:
@@ -24,29 +40,68 @@ paths:
         '200':
           description: successful operation
         '400':
-          description: Bad request
+          description: Bad request          
+    # post:
+    #   tags:
+    #     - Category
+    #   summary: Create Category
+    #   description: 'Create Category with this API'
+    #   operationId: createCategory
+    #   consumes:
+    #     - application/json
+    #   produces:
+    #     - application/json
+    #   parameters:
+    #     - in: query
+    #       name: name
+    #       type: string
+    #       required: true  
+    #   responses:
+    #     '200':
+    #       description: successful operation
+    #     '400':
+    #       description: Bad request
+    #   security:
+    #     - api_key: [] 
+   
+  /mobileUser/create:
     post:
       tags:
-        - Category
-      summary: Create Category
-      description: 'Create Category with this API'
-      operationId: createCategory
+        - mobileUser/create
+      summary: Create User
+      description: 'Create User with this API'
+      operationId: createUser
       consumes:
         - application/json
       produces:
         - application/json
       parameters:
-        - in: query
-          name: name
-          type: string
-          required: true  
+        - in: "body"
+          name: "body"
+          description: "The body will contain full_name,user_name,email and phone_no"
+          schema:
+            type: object
+            properties:
+              full_name:
+                type: string
+              user_name:
+                type: string
+              email:
+                type: string
+              phone_no:
+                type: string  
+
+          # full_name : full_name
+          # user_name: user_name
+          # email: email
+          # phone_no: phone_no
+          # type: string
+ 
       responses:
         '200':
           description: successful operation
         '400':
           description: Bad request
-      security:
-        - api_key: [] 
 
 securityDefinitions:
   api_key:

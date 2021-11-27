@@ -169,7 +169,7 @@ class ApiController extends Controller
 
          $mess_text = "Hi, Welcome to Review App, Your Mobile Verification one-time password is: ";
 
-         $mess_status = send_sms($otp,$request->phone_no,$mess_text);
+         $mess_status = self::send_sms($otp,$request->phone_no,$mess_text);
 
         if($mess_status == "202"){
 
@@ -239,7 +239,7 @@ class ApiController extends Controller
             
             if($mobile_otp_count == 0){
                 // First time login case.
-                $mess_status = send_sms($otp,$request->phone_no,$mess_text);
+                $mess_status = self::send_sms($otp,$request->phone_no,$mess_text);
                 if($mess_status == "202"){
 
                     $mobile_otp_User = new MobileAuthentication;
@@ -260,7 +260,7 @@ class ApiController extends Controller
                 }    
             }else{   
                 // Login senorio for the second time
-                $mess_status = send_sms($otp,$request->phone_no,$mess_text);
+                $mess_status = self::send_sms($otp,$request->phone_no,$mess_text);
                 if($mess_status == "202"){
                     MobileAuthentication::where('phone_no',$request->phone_no)
                         ->update(array(
