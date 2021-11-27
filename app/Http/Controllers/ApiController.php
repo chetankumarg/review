@@ -343,7 +343,7 @@ class ApiController extends Controller
                             "status" => true,
                             "otp_from"=> "login",
                             "resend_otp_register" => false,
-                            "message" => "otp is send to the register mobile number updated"
+                            "message" => "Resend otp is send to the register mobile number updated"
                         ], 201);   
                 }
             
