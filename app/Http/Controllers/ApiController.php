@@ -325,6 +325,13 @@ class ApiController extends Controller
 
         $user_phone_count = MobileUsers::where('phone_no',$request->phone_no)->count();
 
+        if($user_phone_count == 0){
+            return response()->json([
+                "status" => false,
+                "message" => "Mobile number is not register"
+            ], 201);
+        }
+
         $mobile_otp_count = MobileAuthentication::where('phone_no',$request->phone_no)->count();
 
         // otpfrom will be 1 or 2 , 1 means register ,2 means login
