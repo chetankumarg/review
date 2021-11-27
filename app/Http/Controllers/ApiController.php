@@ -345,8 +345,7 @@ class ApiController extends Controller
                             "resend_otp_register" => false,
                             "message" => "Resend otp is send to the register mobile number updated"
                         ], 201);   
-                }
-            
+                }    
         }elseif($otp_from == 1){
 
             $otp = mt_rand(1000,9999);
@@ -364,7 +363,7 @@ class ApiController extends Controller
                         "status" => true,
                         "otp_from"=> "register",
                         "resend_otp_register" => true,
-                        "message" => "otp is send to the register mobile number updated"
+                        "message" => "otp is re-send to the register mobile number updated"
                     ], 201);   
             }
 
