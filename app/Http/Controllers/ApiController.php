@@ -67,8 +67,9 @@ class ApiController extends Controller
             }
         }
         return response()->json([
-            "status" => true,
+            "status" => true,            
             "message" => "User-name is available you use along with it you can use other suggestion name",
+            "isAvailable" => true,
             "avaliable_username" => $suggestion_name
         ], 201);
     }else{
@@ -86,6 +87,7 @@ class ApiController extends Controller
         return response()->json([
             "status" => true,
             "message" => "User-name suggestion",
+            "isAvailable" => false,
             "avaliable_username" => $suggestion_name
         ], 201);
     }
