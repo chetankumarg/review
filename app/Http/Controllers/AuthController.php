@@ -7,7 +7,9 @@ use Validator,Redirect,Response;
 Use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use App\Models\MobileUsers;
 use Session;
+use DB;
  
 class AuthController extends Controller
 {
@@ -20,6 +22,15 @@ class AuthController extends Controller
         return view('login');
       } 
     }  
+
+    public function swaggerlist(){
+      if(Auth::check()){
+        return view("swagger.index");
+      }else{
+        return view('login');
+      }
+    }
+
  
     public function registration()
     {
@@ -60,9 +71,20 @@ class AuthController extends Controller
     {
  
       if(Auth::check()){
-        return view('dashboard');
+        $mobileUsers = MobileUsers::all();
+        return view('dashboard', compact('mobileUsers'));
       }
        return Redirect::to("login")->withSuccess('Opps! You do not have access');
+    }
+
+    public function moblieUserDashboard(){
+
+      if(Auth::check()){
+        $mobileUsers = MobileUsers::all();
+        return view('tables', compact('mobileUsers'));
+      }
+       return Redirect::to("login")->withSuccess('Opps! You do not have access');
+
     }
  
     public function create(array $data)

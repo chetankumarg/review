@@ -25,8 +25,6 @@ Route::post('post-login', 'App\Http\Controllers\AuthController@postLogin');
 // Route::get('registration', 'App\Http\Controllers\AuthController@registration');
 // Route::post('post-registration', 'App\Http\Controllers\AuthController@postRegistration'); 
 Route::get('dashboard', 'App\Http\Controllers\AuthController@dashboard'); 
+Route::get('mobile_usertables', 'App\Http\Controllers\AuthController@moblieUserDashboard'); 
 Route::get('logout', 'App\Http\Controllers\AuthController@logout');
-
-Route::get('/docs', function () {
-    return view('swagger.index');
-});
+Route::get('docs', 'App\Http\Controllers\AuthController@swaggerlist');

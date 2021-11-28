@@ -90,18 +90,200 @@ paths:
                 type: string
               phone_no:
                 type: string  
-
-          # full_name : full_name
-          # user_name: user_name
-          # email: email
-          # phone_no: phone_no
-          # type: string
- 
       responses:
         '200':
           description: successful operation
         '400':
           description: Bad request
+
+  /mobileUser/otp_verification:
+    post:
+      tags:
+        - mobileUser/otp_verification
+      summary: OTP Verification for the Registration 
+      description: 'OTP Verification for the Registration'
+      operationId: otpVerification
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - in: "body"
+          name: "body"
+          description: "The body will contain phone_no and otp"
+          schema:
+            type: object
+            properties:
+              phone_no:
+                type: string 
+              otp:
+                type: string    
+      responses:
+        '200':
+          description: successful operation
+        '400':
+          description: Bad request   
+
+  /mobileUser/mobilelogin:
+    post:
+      tags:
+        - mobileUser/mobilelogin
+      summary: App mobile user Login 
+      description: 'App mobile user Login'
+      operationId: Mobile_user_Login
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - in: "body"
+          name: "body"
+          description: "The body will contain phone_no and otp"
+          schema:
+            type: object
+            properties:
+              phone_no:
+                type: string 
+      responses:
+        '200':
+          description: successful operation
+        '400':
+          description: Bad request  
+
+  /mobileUser/login_otp_verification:
+    post:
+      tags:
+        - mobileUser/login_otp_verification
+      summary: OTP Verification for the login 
+      description: 'OTP Verification for the login'
+      operationId: otpVerification
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - in: "body"
+          name: "body"
+          description: "The body will contain phone_no and otp"
+          schema:
+            type: object
+            properties:
+              phone_no:
+                type: string 
+              otp:
+                type: string    
+      responses:
+        '200':
+          description: successful operation
+        '400':
+          description: Bad request  
+
+  /mobileUser/check_username:
+    post:
+      tags:
+        - mobileUser/check_username
+      summary: check username is exist or not
+      description: 'check username is exist or not'
+      operationId: check_username
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - in: "body"
+          name: "body"
+          description: "The body will contain user_name"
+          schema:
+            type: object
+            properties:
+              user_name:
+                type: string 
+      responses:
+        '200':
+          description: successful operation
+        '400':
+          description: Bad request  
+
+  /mobileUser/check_mobileno:
+    post:
+      tags:
+        - mobileUser/check_mobileno
+      summary: check mobileno is exist or not
+      description: 'check mobileno is exist or not'
+      operationId: check mobileno
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - in: "body"
+          name: "body"
+          description: "The body will contain mobileno"
+          schema:
+            type: object
+            properties:
+              phone_no:
+                type: string    
+      responses:
+        '200':
+          description: successful operation
+        '400':
+          description: Bad request  
+
+  /mobileUser/check_email:
+    post:
+      tags:
+        - mobileUser/check_email
+      summary: check mobileno is exist or not
+      description: 'check mobileno is exist or not'
+      operationId: check_email
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - in: "body"
+          name: "body"
+          description: "The body will contain phone_no and otp"
+          schema:
+            type: object
+            properties:
+              email:
+                type: string    
+      responses:
+        '200':
+          description: successful operation
+        '400':
+          description: Bad request  
+
+  /mobileUser/resend_otpsms:
+    post:
+      tags:
+        - mobileUser/resend_otpsms
+      summary: resend otpsms Verification for the login 
+      description: 'resend_otpsms verification for the login'
+      operationId: otpVerifiresend_otpsmscation
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - in: "body"
+          name: "body"
+          description: "The body will contain phone_no and otp"
+          schema:
+            type: object
+            properties:
+              phone_no:
+                type: string 
+              otp:
+                type: string    
+      responses:
+        '200':
+          description: successful operation
+        '400':
+          description: Bad request  
+
 
 securityDefinitions:
   api_key:
