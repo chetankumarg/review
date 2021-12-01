@@ -409,8 +409,8 @@ class ApiController extends Controller
         $file_sign =null;
 
                 // Handle File upload
-                if (request()->hasFile('receiver_photo')){
-                    $image = $request->file('receiver_photo');
+                if (request()->hasFile('profile_pic')){
+                    $image = $request->file('profile_pic');
                     $imageName = $request->uid ."-".time() . '.' . $image->getClientOriginalExtension();
                     $destinationPath = public_path('/uploads/profile_picture/');
                    // $image->move($destinationPath, $imageName);
@@ -420,6 +420,12 @@ class ApiController extends Controller
                         return response()->json([
                             "status" => "success",                           
                             "message" => "Image has been uploaded successfully"
+                        ], 201);
+                    }else{
+
+                        return response()->json([
+                            "status" => "fail",                           
+                            "message" => "Image has been not uploaded successfully"
                         ], 201);
                     }
                     $image->imagePath = $destinationPath . $imageName;
