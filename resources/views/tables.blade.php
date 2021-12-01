@@ -51,7 +51,7 @@
             <li class="nav-item active">
                 <a class="nav-link" href="/mobile_usertables">
                     <i class="fas fa-fw fa-table"></i>
-                    <span>Tables</span></a>
+                    <span>Mobile Users</span></a>
             </li>
                 <!-- Divider -->
             <hr class="sidebar-divider">

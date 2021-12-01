@@ -8,6 +8,8 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Plivo\RestClient;
 use DB;
+use Illuminate\Support\Facades\Storage;
+use App\Http\Helpers\AppHelper;
 
 class ApiController extends Controller
 {
@@ -377,5 +379,69 @@ class ApiController extends Controller
         }
 
     }  
+
+    public function getupload_pic(Request $request){
+        $mobile_number = $request->phone_no;
+
+       $profile_pic =MobileUsers::where('phone_no', $mobile_number)->value('profile_picture');
+    
+       if($profile_pic){
+        return response()->json([
+            "status" => true,
+            "image_path" => $profile_pic
+        ], 201);
+       }else{
+        return response()->json([
+            "status" => false,
+            "image_path" => ''
+        ], 201);
+       }
+
+    }
+    public function upload_pic(Request $request){
+
+         $mobile_number = $request->phone_no;
+         $mobile_number = $request->uid;
+         $otp_from = $request->image;
+
+        // Working file upload wokring 
+        $file_photo =null;
+        $file_sign =null;
+
+                // Handle File upload
+                if (request()->hasFile('receiver_photo')){
+                    $image = $request->file('receiver_photo');
+                    $imageName = $request->uid ."-".time() . '.' . $image->getClientOriginalExtension();
+                    $destinationPath = public_path('/uploads/profile_picture/');
+                   // $image->move($destinationPath, $imageName);
+                    if( $image->move($destinationPath, $imageName) ){
+                        $file_path =$destinationPath."".$imageName;
+                        MobileUsers::where('phone_no',$request->phone_no)->update(["profile_picture" => $file_path]);
+                        return response()->json([
+                            "status" => "success",                           
+                            "message" => "Image has been uploaded successfully"
+                        ], 201);
+                    }
+                    $image->imagePath = $destinationPath . $imageName;
+                    
+                }
+        // if($request->file('receiver_photo')){
+        //     $name = $request->uid.'_'.$request->file('receiver_photo')->getClientOriginalExtension();
+        //     $ext  = $request->file('receiver_photo')->extension();
+        //     $url  = 'delivery/photo/'.$name;
+        //     $request->receiver_photo->move(base_path('public/uploads/profile_picture/'), $name);
+           
+        //     $file_photo = $request->files()->create( [
+        //         'name'    => $name,
+        //         'url'     => $url,
+        //         'ext'     => $ext,
+        //         'type'     => 'receiver_photo',
+        //         'alt' => $request->input( 'alt_text' )
+                
+        //     ]);//->fillable(['type' => 'receiver_photo']);
+        // }
+        // File uploading file structure...
+        
+    }
 
 }
