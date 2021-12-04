@@ -33,6 +33,23 @@ class ApiController extends Controller
 
    }
 
+   // function used to get the user details by phone-no:
+   public function getusr_detail_by_phone($phoneno){
+        $mobileUsers = MobileUsers::where('phone_no', $phoneno)->get();
+        $userdata = array();
+        foreach($mobileUsers as $data)
+                                    {                                      
+                                    $userdata["id"] = $data->id;
+                                    $userdata["full_name"] = $data->full_name;  // $petani is a Std Class Object here
+                                    $userdata["email"] = $data->email;
+                                    $userdata["username"] = $data->user_name;
+                                    $userdata["phoneno"] = $data->phone_no;
+                                    $userdata["active"] = $data->active;
+                                    $userdata["createdat"] = $data->created_at;
+                                    }
+        return $userdata;                           
+    }
+
    public function send_sms($otp,$dest_no,$mess_text){
 
     $client = new RestClient("MAZGMXNDEYOWJMZDG3ND","ODA2ZGM1MWFiYTk4Yjk5ZTM1YTM5OWQ2ZWQ0ZjIw");
@@ -215,9 +232,11 @@ class ApiController extends Controller
     if($user_otp_verification_count == 1){
         // used to update the mobile user of active is 1
         MobileUsers::where('phone_no',$request->phone_no)->update(["active" => 1]);
+        $userdetails = self::getusr_detail_by_phone($request->phone_no);
         return response()->json([
             "status" => true,
-            "message" => "OTP given is correct"
+            "message" => "OTP given is correct",
+            "userdetails" => $userdetails
         ], 201);
     }else{
         return response()->json([
@@ -297,13 +316,15 @@ class ApiController extends Controller
             $mobile_otp_verification_count = MobileAuthentication::where('phone_no',$request->phone_no)->where('otp',$request->otp)->count();
 
             if( $mobile_otp_verification_count == 1){
+                $userdetails = self::getusr_detail_by_phone($request->phone_no);
                 MobileAuthentication::where('phone_no',$request->phone_no)
                 ->update(array(
                         'expired'=> "1"
                 ));  
                 return response()->json([
                     "status" => true,
-                    "message" => "otp is correct"
+                    "message" => "otp is correct",
+                    "userdetails" => $userdetails
                 ], 201);  
             }else{
                 return response()->json([
@@ -338,6 +359,7 @@ class ApiController extends Controller
 
         // otpfrom will be 1 or 2 , 1 means register ,2 means login
         if($otp_from == 2){
+            $userdetails = self::getusr_detail_by_phone($mobile_number);
             $otp = mt_rand(1000,9999);
             $mess_text = "Hi, Welcome to Review App, (Resend OTP) Your Login one-time password is: ";
             
@@ -352,6 +374,7 @@ class ApiController extends Controller
                             "status" => true,
                             "otp_from"=> "login",
                             "resend_otp_register" => false,
+                            "userdetails" => $userdetails,
                             "message" => "Resend otp is send to the register mobile number updated"
                         ], 201);   
                 }    
@@ -379,6 +402,38 @@ class ApiController extends Controller
         }
 
     }  
+
+    public function getuser_details(Request $request){
+
+        $userid = $request->uid;
+        $userdata = array();
+        $user_id_count = MobileUsers::where('id',$userid)->count();
+        if($user_id_count == 1){
+        $mobileUsers = MobileUsers::where('id', $userid)->get();
+
+        foreach($mobileUsers as $data)
+                                    {                                      
+                                      $userdata["id"] = $data->id;
+                                      $userdata["full_name"] = $data->full_name;  // $petani is a Std Class Object here
+                                      $userdata["email"] = $data->email;
+                                      $userdata["username"] = $data->user_name;
+                                      $userdata["phoneno"] = $data->phone_no;
+                                      $userdata["active"] = $data->active;
+                                      $userdata["createdat"] = $data->created_at;
+                                    }
+                                    
+        return response()->json([
+                "status" => true,
+                "userdetails" => $userdata
+        ], 201); 
+    }else{
+        return response()->json([
+            "status" => false,
+            "message" => "Userid not present in database"
+    ], 201); 
+    }                           
+        
+    }
 
     public function getupload_pic(Request $request){
         $mobile_number = $request->phone_no;

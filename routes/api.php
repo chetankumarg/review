@@ -36,3 +36,5 @@ Route::post('mobileUser/resend_otpsms', 'App\Http\Controllers\ApiController@rese
 
 Route::post('mobileUser/upload_pic', 'App\Http\Controllers\ApiController@upload_pic');
 Route::post('mobileUser/get_upload_pic', 'App\Http\Controllers\ApiController@getupload_pic');
+
+Route::post('mobileUser/get_user_details', 'App\Http\Controllers\ApiController@getuser_details');
