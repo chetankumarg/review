@@ -310,7 +310,6 @@ paths:
         '400':
           description: Bad request  
 
-
 securityDefinitions:
   api_key:
     type: apiKey
