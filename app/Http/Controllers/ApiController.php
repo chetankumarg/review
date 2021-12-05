@@ -44,6 +44,7 @@ class ApiController extends Controller
                                     $userdata["email"] = $data->email;
                                     $userdata["username"] = $data->user_name;
                                     $userdata["phoneno"] = $data->phone_no;
+                                    $userdata["profile_picture"] = $data->profile_picture;
                                     $userdata["active"] = $data->active;
                                     $userdata["createdat"] = $data->created_at;
                                     }
