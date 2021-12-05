@@ -30,9 +30,7 @@ class ApiController extends Controller
 
     header('Content-Type: application/json');
     return json_encode($response->statusCode);
-
    }
-
    // function used to get the user details by phone-no:
    public function getusr_detail_by_phone($phoneno){
         $mobileUsers = MobileUsers::where('phone_no', $phoneno)->get();
@@ -52,7 +50,6 @@ class ApiController extends Controller
     }
 
    public function send_sms($otp,$dest_no,$mess_text){
-
     $client = new RestClient("MAZGMXNDEYOWJMZDG3ND","ODA2ZGM1MWFiYTk4Yjk5ZTM1YTM5OWQ2ZWQ0ZjIw");
     $response = $client->messages->create(
         [  
@@ -71,11 +68,8 @@ class ApiController extends Controller
    public function check_username(Request $request){
 
     $user_name_count = MobileUsers::where('user_name',$request->user_name)->count();
-
     $suggestion_name = array();
-
     if($user_name_count == 0){
-
         for($i = 0; $i < 3; $i++){
             $full_name = $request->full_name;
             $f_name = substr($full_name, 0 ,4) ."@". mt_rand(1000,9999);
@@ -116,8 +110,7 @@ class ApiController extends Controller
    // function for checking the check_mobileno
    public function check_mobileno(Request $request){
     
-    $user_phone_count = MobileUsers::where('phone_no',$request->phone_no)->count();  
-        
+    $user_phone_count = MobileUsers::where('phone_no',$request->phone_no)->count();     
         if( $user_phone_count == 0){
             return response()->json([
                 "status" => true,
