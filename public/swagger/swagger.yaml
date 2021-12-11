@@ -310,6 +310,40 @@ paths:
         '400':
           description: Bad request  
 
+  /mobileUser/get_user_followers?uid=5&name=shashi:
+    get:
+      tags:
+        - Get User Follower
+      summary: Get User Follower uid and name are options as per the requirments
+      description: 'Get User Follower with this API'
+      operationId: category
+      consumes:
+        - application/json
+      produces:
+        - application/json 
+      responses:
+        '200':
+          description: successful operation
+        '400':
+          description: Bad request
+
+  /mobileUser/get_trending_list?hashtag=iphone:
+    get:
+      tags:
+        - Trending List
+      summary: Trending Category with this API hashtag is optional where hastag is not present render all tredent events active
+      description: 'Trending Category with this API hashtag is optional where hastag is not present render all tredent events active'
+      operationId: Trending
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      responses:
+        '200':
+          description: successful operation
+        '400':
+          description: Bad request         
+
 securityDefinitions:
   api_key:
     type: apiKey
