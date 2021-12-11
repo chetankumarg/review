@@ -583,4 +583,49 @@ class ApiController extends Controller
 
     }
 
+    public function get_trending_list(Request $request){
+        $hashtags = $request->hashtag;
+        $usercontianer = array();
+
+        if(empty($hashtags)){
+            $result = DB::table("reviews as r")
+            ->join("trendings as t","t.review_id","=","r.id")
+            ->where('t.active',1)
+            ->select("r.id", 
+                    "r.hashtags","r.name")
+            ->get();        
+        }else{
+
+            $result = DB::table("reviews as r")
+            ->join("trendings as t","t.review_id","=","r.id")
+            ->where('t.active',1)
+            ->where('r.hashtags', 'like', '%'.$hashtags.'%')
+            ->select("r.id", 
+                    "r.hashtags","r.name")
+            ->get();     
+            
+            if(count($result) == 0){
+                return response()->json([
+                    "status" => false,
+                    "message" => "Trending list with this hashtag is 0"
+                ], 201);  
+            }
+        }            
+
+            foreach($result as $data)
+                    {                                      
+                      $eventdata["id"] = $data->id;
+                      $eventdata["name"] = $data->name;  // $petani is a Std Class Object here
+                      $eventdata["hashtags"] = $data->hashtags;
+                      $eventcontianer[] = $eventdata;
+                    }
+            
+            return response()->json([
+                "status" => true,
+                "message" => "Trending list",
+                "userdetails" => $eventcontianer
+            ], 201);           
+
+    }
+
 }

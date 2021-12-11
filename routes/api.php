@@ -40,3 +40,5 @@ Route::post('mobileUser/get_upload_pic', 'App\Http\Controllers\ApiController@get
 Route::post('mobileUser/get_user_details', 'App\Http\Controllers\ApiController@getuser_details');
 
 Route::get('mobileUser/get_user_followers','App\Http\Controllers\ApiController@getuser_followers');
+
+Route::get('mobileUser/get_trending_list','App\Http\Controllers\ApiController@get_trending_list');
