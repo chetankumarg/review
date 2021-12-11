@@ -38,3 +38,5 @@ Route::post('mobileUser/upload_pic', 'App\Http\Controllers\ApiController@upload_
 Route::post('mobileUser/get_upload_pic', 'App\Http\Controllers\ApiController@getupload_pic');
 
 Route::post('mobileUser/get_user_details', 'App\Http\Controllers\ApiController@getuser_details');
+
+Route::get('mobileUser/get_user_followers','App\Http\Controllers\ApiController@getuser_followers');

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 use App\Models\MobileUsers;
+use App\Models\followers;
 use App\Models\MobileAuthentication;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -497,6 +498,89 @@ class ApiController extends Controller
         // }
         // File uploading file structure...
         
+    }
+
+    public function getuser_followers(Request $request){
+
+        $username = $request->name;
+        $current_userid = $request->uid;
+        $usercontianer = array();
+
+        if(!empty($username)){
+            $mobileUsers = MobileUsers::where('user_name', 'like', '%'.$username.'%')->get();
+
+            if(count($mobileUsers) > 0){
+            foreach($mobileUsers as $data)
+                            {                                      
+                              $userdata["id"] = $data->id;
+                              $userdata["full_name"] = $data->full_name;  // $petani is a Std Class Object here
+                              $userdata["email"] = $data->email;
+                              $userdata["username"] = $data->user_name;
+                              $userdata["phoneno"] = $data->phone_no;
+                              $userdata["active"] = $data->active;
+                              $userdata["createdat"] = $data->created_at;
+                              $usercontianer[] = $userdata;
+                            }
+                return response()->json([
+                                "status" => true,
+                                "message" => "User-name with".$username,
+                                "userdetails" => $usercontianer
+                ], 201);             
+            }else{
+                return response()->json([
+                    "status" => false,
+                    "message" => "No User name is found",
+                    "user_name" => $username
+                 ], 201);
+            }                
+        }
+
+        if(!empty($current_userid)){
+
+            $result = DB::table("mobile_users as mu")
+            ->join("followers as fol","fol.user_id","=","mu.id")
+            ->where('fol.user_id',$current_userid)
+            ->select("mu.id", 
+                    "fol.user_id","follower_id")
+            ->get();
+
+            if(count($result) > 0){
+            foreach($result as $data)
+            {                                      
+              $userdata['id'] = $data->id;
+              $userdata['followerid'] = $data->follower_id;
+
+              $mobileUsers = MobileUsers::where('id', $data->follower_id)->get();
+
+              foreach($mobileUsers as $data)
+                            {                                      
+                              $userdata["id"] = $data->id;
+                              $userdata["full_name"] = $data->full_name;  // $petani is a Std Class Object here
+                              $userdata["email"] = $data->email;
+                              $userdata["username"] = $data->user_name;
+                              $userdata["phoneno"] = $data->phone_no;
+                              $userdata["active"] = $data->active;
+                              $userdata["createdat"] = $data->created_at;
+                              $usercontianer[] = $userdata;
+                            }
+
+             // $usercontianer[] = $userdata;
+            }
+                return response()->json([
+                    "status" => true,
+                    "message" => "My Followers",
+                    "userdetails" => $usercontianer
+                 ], 201); 
+            }else{
+                return response()->json([
+                    "status" => false,
+                    "message" => "My Followers",
+                    "userdetails" => 0
+                 ], 201); 
+            }     
+          //  var_dump($usercontianer);
+        }
+
     }
 
 }
