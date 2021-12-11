@@ -311,43 +311,58 @@ paths:
           description: Bad request  
 
   /mobileUser/get_user_followers:
-    post:
+     post:
       tags:
-        - Get User Follower
-      summary: Get User Follower uid and name are options as per the requirments
-      description: 'Get User Follower with this API'
-      operationId: category
+        - mobileUser/get_user_details
+      summary: mobileUser get_user_details 
+      description: 'mobileUser get_user_details'
+      operationId: mobileUser get_user_details
       consumes:
         - application/json
       produces:
-        - application/json 
+        - application/json
       parameters:
-        - uid: "body"
-          name: "body"  
+        - in: "body"
+          name: "body"
+          description: "The body will contain phone_no and otp"
+          schema:
+            type: object
+            properties:
+              uid:
+                type: string  
+              name:
+                type: string  
       responses:
         '200':
           description: successful operation
         '400':
-          description: Bad request
+          description: Bad request 
 
-  /mobileUser/get_trending_list:
+  /mobileUser/get_trending_list?hashtag:
     post:
       tags:
-        - Trending List
-      summary: Trending Category with this API hashtag is optional where hastag is not present render all tredent events active
-      description: 'Trending Category with this API hashtag is optional where hastag is not present render all tredent events active'
-      operationId: Trending
+        - mobileUser/get_user_details
+      summary: mobileUser get_user_details 
+      description: 'mobileUser get_user_details'
+      operationId: mobileUser get_user_details
       consumes:
         - application/json
       produces:
         - application/json
       parameters:
-        - hashtag: "#hashtags"  
+        - in: "body"
+          name: "body"
+          description: "The body will contain phone_no and otp"
+          schema:
+            type: object
+            properties:
+              hashtag:
+                type: string  
       responses:
         '200':
           description: successful operation
         '400':
-          description: Bad request         
+          description: Bad request        
 
 securityDefinitions:
   api_key:
