@@ -540,7 +540,7 @@ class ApiController extends Controller
 
             $result = DB::table("mobile_users as mu")
             ->join("followers as fol","fol.user_id","=","mu.id")
-            ->where('fol.user_id',$current_userid)
+          // as per the discussion will list all users   ->where('fol.user_id',$current_userid)
             ->select("mu.id", 
                     "fol.user_id","follower_id")
             ->get();
