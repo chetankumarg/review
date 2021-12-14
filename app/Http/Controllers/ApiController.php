@@ -515,6 +515,7 @@ class ApiController extends Controller
                               $userdata["id"] = $data->id;
                               $userdata["full_name"] = $data->full_name;  // $petani is a Std Class Object here
                               $userdata["email"] = $data->email;
+                              $userdata["profile_picture"] = $data->profile_picture;
                               $userdata["username"] = $data->user_name;
                               $userdata["phoneno"] = $data->phone_no;
                               $userdata["active"] = $data->active;
@@ -557,6 +558,7 @@ class ApiController extends Controller
                               $userdata["id"] = $data->id;
                               $userdata["full_name"] = $data->full_name;  // $petani is a Std Class Object here
                               $userdata["email"] = $data->email;
+                              $userdata["profile_picture"] = $data->profile_picture;
                               $userdata["username"] = $data->user_name;
                               $userdata["phoneno"] = $data->phone_no;
                               $userdata["active"] = $data->active;
