@@ -575,7 +575,7 @@ class ApiController extends Controller
                 return response()->json([
                     "status" => false,
                     "message" => "My Followers",
-                    "userdetails" => 0
+                    "userdetails" => []
                  ], 201); 
             }     
           //  var_dump($usercontianer);
@@ -607,7 +607,8 @@ class ApiController extends Controller
             if(count($result) == 0){
                 return response()->json([
                     "status" => false,
-                    "message" => "Trending list with this hashtag is 0"
+                    "message" => "Trending list with this hashtag is 0",
+                    "eventdetails" => []
                 ], 201);  
             }
         }            
@@ -623,7 +624,7 @@ class ApiController extends Controller
             return response()->json([
                 "status" => true,
                 "message" => "Trending list",
-                "userdetails" => $eventcontianer
+                "eventdetails" => $eventcontianer
             ], 201);           
 
     }
