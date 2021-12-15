@@ -531,7 +531,7 @@ class ApiController extends Controller
                 return response()->json([
                     "status" => false,
                     "message" => "No User name is found",
-                    "user_name" => $username
+                    "user_name" => []
                  ], 201);
             }                
         }
