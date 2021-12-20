@@ -73,7 +73,9 @@ class ApiController extends Controller
     if($user_name_count == 0){
         for($i = 0; $i < 3; $i++){
             $full_name = $request->full_name;
-            $f_name = substr($full_name, 0 ,4) ."@". mt_rand(1000,9999);
+           // $f_name = substr($full_name, 0 ,4) ."@". mt_rand(1000,9999);
+            $f_name=explode(' ', $full_name);
+            $f_name=$f_name[0]."_".mt_rand(1000,9999);
             $user_name_f_count = MobileUsers::where('user_name',$f_name)->count();
             if(  $user_name_f_count == 0){
                 $suggestion_name[] = $f_name;
