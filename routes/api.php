@@ -31,6 +31,7 @@ Route::post('mobileUser/check_mobileno', 'App\Http\Controllers\ApiController@che
 Route::post('mobileUser/check_email', 'App\Http\Controllers\ApiController@check_email');
 
 Route::get('mobileUser/test_otpsms', 'App\Http\Controllers\ApiController@send_testsms');
+
 Route::post('mobileUser/resend_otpsms', 'App\Http\Controllers\ApiController@resend_otp');
 
 
@@ -42,3 +43,5 @@ Route::post('mobileUser/get_user_details', 'App\Http\Controllers\ApiController@g
 Route::post('mobileUser/get_user_followers','App\Http\Controllers\ApiController@getuser_followers');
 
 Route::post('mobileUser/get_trending_list','App\Http\Controllers\ApiController@get_trending_list');
+
+Route::get('mobileUser/test_getjsonurl', 'App\Http\Controllers\ApiController@get_jsonurl');

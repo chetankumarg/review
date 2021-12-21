@@ -631,6 +631,60 @@ class ApiController extends Controller
                 "eventdetails" => $eventcontianer
             ], 201);           
 
+    } 
+
+    public function get_jsonurl(Request $request){
+
+        $url = $request->url;
+        
+        // echo "Hi dsafsdaf";
+
+        // $ch = curl_init();
+        // curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+        // curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        // curl_setopt($ch, CURLOPT_URL, 'https://www.amazon.in/Michael-Kors-Analog-Mother-Watch-MK3831/dp/B0795632LQ?ref_=Oct_DLandingS_D_7d256c7f_77&smid=A1JFLV2BUSJ5AK');
+        // $result = curl_exec($ch);
+        // curl_close($ch);
+
+        // $obj = json_decode($result);
+        // var_dump($obj);
+        // return $obj;
+     //   $url='https://www.amazon.in/dp/B082DJ9S58/ref=s9_acsd_al_bw_c2_x_0_t?pf_rd_m=A1K21FY43GMZF8&pf_rd_s=merchandised-search-6&pf_rd_r=SE4BJG9N3J0KSQGYD2BN&pf_rd_t=101&pf_rd_p=67d3b229-e14c-4336-b71f-9cdc781470de&pf_rd_i=16676064031';
+        $meta=get_meta_tags($url);
+        if(!empty($meta['title'])){
+           $title=$meta['title'];
+        }elseif(!empty($meta['og_title'])){
+           $title=$meta['og_title'];
+        }else{
+            $title = '';
+        }
+
+        if(!empty($meta['Description'])){
+            $description = $meta['Description']; 
+        }elseif(!empty($meta['description'])){
+            $description = $meta['description']; 
+        }
+        elseif(!empty($meta['og:description'])){
+           $description = $meta['og:description'];
+        }else{
+            $description = '';
+        }
+
+        if(!empty($meta['og_image'])){
+            $image = $meta['og_image'];
+        }else{
+            $image = "";
+        }
+
+      //  echo "title - " . $title . " <br/> Description: - " .$description  . "<br/> Image -: " . $image;        // var_dump($meta);
+
+        return response()->json([
+            "status" => true,
+            "title" => $title,
+            "description" => $description,
+            "image" => $image
+        ], 201); 
+
     }
 
 }
