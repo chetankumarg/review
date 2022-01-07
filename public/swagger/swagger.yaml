@@ -338,6 +338,32 @@ paths:
         '400':
           description: Bad request 
 
+  /mobileUser/get_upload_media:
+     post:
+      tags:
+        - mobileUser/get_upload_media
+      summary: mobileUser get_upload Media with keyword- upload_img 
+      description: 'mobileUser get_upload Media'
+      operationId: mobileUser get_upload Media
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - in: "body"
+          name: "body"
+          description: "upload the image for the media purpose keyword- upload_img"
+          schema:
+            type: object
+            properties:
+              upload_img:
+                file: string  
+      responses:
+        '200':
+          description: successful operation
+        '400':
+          description: Bad request            
+
   /mobileUser/get_trending_list?hashtag:
     post:
       tags:
