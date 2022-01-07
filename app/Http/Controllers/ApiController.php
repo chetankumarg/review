@@ -450,6 +450,34 @@ class ApiController extends Controller
        }
 
     }
+
+    public function upload_media_img(Request $request){
+
+        if (request()->hasFile('upload_img')){
+            $image = $request->file('upload_img');
+            $imageName = random_int(10000, 99999)."-".time() . '.' . $image->getClientOriginalExtension();
+            $destinationPath = public_path('/uploads/post_media/');
+           // $image->move($destinationPath, $imageName);
+            if( $image->move($destinationPath, $imageName) ){
+                $file_path =$destinationPath."".$imageName;
+                return response()->json([
+                    "status" => "success",                           
+                    "message" => "Image has been uploaded successfully",
+                    "img_url" => $file_path
+                ], 201);
+            }else{
+
+                return response()->json([
+                    "status" => "fail",                           
+                    "message" => "Image has been not uploaded successfully"
+                ], 201);
+            }
+            $image->imagePath = $destinationPath . $imageName;
+            
+        }
+
+    }
+
     public function upload_pic(Request $request){
 
          $mobile_number = $request->phone_no;
@@ -633,6 +661,38 @@ class ApiController extends Controller
 
     } 
 
+    function outputMetaTags($url){
+        // $url = 'https://www.myntra.com/casual-shoes/kook-n-keech/kook-n-keech-men-white-sneakers/2154180/buy';
+         $streamContext = stream_context_create(array(
+         "http" => array(
+             "header" => "User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/50.0.2661.102 Safari/537.36",
+             'follow_location' => false
+          )
+        )
+        ); //we try to act as browser, just in case server forbids us to access to page 
+ 
+         $htmlData = file_get_contents($url, false, $streamContext); //fetch the html data from given url
+         //libxml_use_internal_errors(true); //optionally disable libxml url errors and warnings
+         $doc = new  DOMDocument(); //parse with DOMDocument
+         $doc->loadHTML($htmlData);
+         $xpath = new  DOMXPath($doc); //create DOMXPath object and parse loaded DOM from HTML
+         $query = '//*/meta';
+ 
+         $metaData = $xpath->query($query);
+         foreach ($metaData as $singleMeta) {
+             //for og:image, check if $singleMeta->getAttribute('property') === 'og:image', same goes with og:url
+             //not every meta has property or name attribute
+             if(!empty($singleMeta->getAttribute('property'))){
+                 echo $singleMeta->getAttribute('property') . "\n";
+             }elseif(!empty($singleMeta->getAttribute('name'))){
+                 echo $singleMeta->getAttribute('name')  . "\n";
+             }
+             //get content from meta tag
+             echo $singleMeta->getAttribute('content')  . "\n";
+ 
+         }
+ }
+
     public function get_jsonurl(Request $request){
 
         $url = $request->url;
@@ -655,7 +715,9 @@ class ApiController extends Controller
            $title=$meta['title'];
         }elseif(!empty($meta['og_title'])){
            $title=$meta['og_title'];
-        }else{
+        }elseif(!empty($meta['og:title'])){
+            $title=$meta['og:title'];
+         }else{
             $title = '';
         }
 
@@ -677,6 +739,7 @@ class ApiController extends Controller
         }
 
       //  echo "title - " . $title . " <br/> Description: - " .$description  . "<br/> Image -: " . $image;        // var_dump($meta);
+
 
         return response()->json([
             "status" => true,

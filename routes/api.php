@@ -38,6 +38,7 @@ Route::post('mobileUser/resend_otpsms', 'App\Http\Controllers\ApiController@rese
 Route::post('mobileUser/upload_pic', 'App\Http\Controllers\ApiController@upload_pic');
 Route::post('mobileUser/get_upload_pic', 'App\Http\Controllers\ApiController@getupload_pic');
 
+
 Route::post('mobileUser/get_user_details', 'App\Http\Controllers\ApiController@getuser_details');
 
 Route::post('mobileUser/get_user_followers','App\Http\Controllers\ApiController@getuser_followers');
@@ -45,3 +46,5 @@ Route::post('mobileUser/get_user_followers','App\Http\Controllers\ApiController@
 Route::post('mobileUser/get_trending_list','App\Http\Controllers\ApiController@get_trending_list');
 
 Route::get('mobileUser/test_getjsonurl', 'App\Http\Controllers\ApiController@get_jsonurl');
+
+Route::post('mobileUser/get_upload_media', 'App\Http\Controllers\ApiController@upload_media_img');
