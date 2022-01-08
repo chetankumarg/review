@@ -48,3 +48,6 @@ Route::post('mobileUser/get_trending_list','App\Http\Controllers\ApiController@g
 Route::get('mobileUser/test_getjsonurl', 'App\Http\Controllers\ApiController@get_jsonurl');
 
 Route::post('mobileUser/get_upload_media', 'App\Http\Controllers\ApiController@upload_media_img');
+
+// function to create the review 
+Route::post('mobileUser/create_post', 'App\Http\Controllers\ApiController@create_review');

@@ -362,7 +362,55 @@ paths:
         '200':
           description: successful operation
         '400':
-          description: Bad request            
+          description: Bad request    
+
+  /mobileUser/create_post:
+     post:
+      tags:
+        - mobileUser/create_post
+      summary: mobileUser/create_post get_upload Media with keyword- upload_img 
+      description: 'mobileUser/create_post get_upload Media'
+      operationId: mobileUser/create_post get_upload Media
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - in: "body"
+          name: "body"
+          description: "upload the image for the media purpose keyword- upload_img"
+          schema:
+            type: object
+            properties:
+                name : 
+                  type: string
+                hashtag :
+                  type: string
+                mobile_user_id: 
+                  type: string
+                description : 
+                  type: string       
+                image : 
+                  type: string
+                lat :
+                  type: string
+                long : 
+                  type: string
+                usr_lat :  
+                  type: string
+                usr_long : 
+                  type: string
+                rating : 
+                  type: string
+                categorie_id : 
+                  type: string
+                publish : 
+                  type: string
+      responses:
+        '200':
+          description: successful operation
+        '400':
+          description: Bad request                   
 
   /mobileUser/get_trending_list?hashtag:
     post:

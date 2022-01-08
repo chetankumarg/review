@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 use App\Models\MobileUsers;
 use App\Models\followers;
+use App\Models\Review;
 use App\Models\MobileAuthentication;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -221,6 +222,39 @@ class ApiController extends Controller
             ], 201);
         }    
   }
+
+  // function to create the review (post) by the mobile user api...
+    public function create_review(Request $request){
+
+        $mobileReview = new Review;
+        $mobileReview->name = $request->name;
+        $mobileReview->hashtags = $request->hashtags;
+        $mobileReview->mobile_user_id = $request->mobile_user_id;
+        $mobileReview->description = $request->description;
+        $mobileReview->image =  $request->image;
+        $mobileReview->lat = $request->lat;
+        $mobileReview->long = $request->long;
+        $mobileReview->usr_lat = $request->usr_lat;
+        $mobileReview->usr_long = $request->usr_long;
+        $mobileReview->rating = $request->rating;
+        $mobileReview->categorie_id = $request->categorie_id;
+        $mobileReview->publish = "1";
+
+        $mobileReview->save();
+       
+        if($mobileReview){
+              return response()->json([
+                  "status" => true,
+                  "message" => "mobileReview record created"
+              ], 201);
+          }else{
+              return response()->json([
+                  "status" => false,
+                  "message" => "mobileReview record not created"
+              ], 201);
+          }
+
+    }
 
   public function verifield_otp(Request $request){
 
