@@ -495,10 +495,11 @@ class ApiController extends Controller
             if( $image->move($destinationPath, $imageName) ){
                 $file_path =$destinationPath."".$imageName;
                 return response()->json([
-                    "status" => 200,                           
+                    "status" => 200,                         
                     "message" => "Image has been uploaded successfully",
-                    "img_url" => $file_path
-                ], 201);
+                    "img_url" => $file_path,
+                    "image_url" => env('APP_URL'). "/uploads/post_media/".$imageName
+                ], 200);
             }else{
 
                 return response()->json([
