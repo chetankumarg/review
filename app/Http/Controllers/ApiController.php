@@ -246,12 +246,12 @@ class ApiController extends Controller
               return response()->json([
                   "status" => true,
                   "message" => "mobileReview record created"
-              ], 201);
+              ], 200);
           }else{
               return response()->json([
                   "status" => false,
                   "message" => "mobileReview record not created"
-              ], 201);
+              ], 200);
           }
 
     }
