@@ -96,7 +96,7 @@ class ApiController extends Controller
     $suggestion_name = array();
     if($user_name_count == 0){
         for($i = 0; $i < 3; $i++){
-            $full_name = $request->full_name;
+            $full_name = $request->user_name;
            // $f_name = substr($full_name, 0 ,4) ."@". mt_rand(1000,9999);
             $f_name=explode(' ', $full_name);
             $f_name=$f_name[0]."_".mt_rand(1000,9999);
@@ -116,7 +116,7 @@ class ApiController extends Controller
     }else{
 
         for($i = 0; $i < 3; $i++){
-            $full_name = $request->full_name;
+            $full_name = $request->user_name;
             $f_name = substr($full_name, 0 ,4) ."@". mt_rand(1000,9999);
             $user_name_f_count = MobileUsers::where('user_name',$f_name)->count();
             if(  $user_name_f_count == 0){
@@ -131,7 +131,7 @@ class ApiController extends Controller
             $user_avaliable_username  = $suggestion_name;
         
     }
-    $user_phone_count = MobileUsers::where('phone_no',$request->phone_no)->count();     
+    $user_phone_count = MobileUsers::where('phone_no',$request->user_mobileno)->count();     
     if( $user_phone_count == 0){
        
             $user_mobile_status = true;
@@ -143,7 +143,7 @@ class ApiController extends Controller
       
     }
 
-    $user_mail_count = MobileUsers::where('email',$request->email)->count();
+    $user_mail_count = MobileUsers::where('email',$request->user_mail)->count();
     if( $user_mail_count == 0){
         
             $user_mail_status = true;
