@@ -66,6 +66,110 @@ class ApiController extends Controller
 
    }
 
+   public function check_userdetials(Request $request){
+       $user_name = $request->user_name;
+       $user_email = $request->user_mail;
+       $user_mobileno = $request->user_mobileno;
+
+       if(empty($request->user_name)){
+        return response()->json([
+            "status" => false,
+            "message" => "User Name should not be empty."
+        ], 200);
+       }
+
+       if(empty($request->user_mail)){
+        return response()->json([
+            "status" => false,
+            "message" => "User Mail should not be empty."
+        ], 200);
+       }
+
+       if(empty($request->user_mobileno)){
+        return response()->json([
+            "status" => false,
+            "message" => "User Mobile-No should not be empty."
+        ], 200);
+       }
+
+    $user_name_count = MobileUsers::where('user_name',$request->user_name)->count();
+    $suggestion_name = array();
+    if($user_name_count == 0){
+        for($i = 0; $i < 3; $i++){
+            $full_name = $request->full_name;
+           // $f_name = substr($full_name, 0 ,4) ."@". mt_rand(1000,9999);
+            $f_name=explode(' ', $full_name);
+            $f_name=$f_name[0]."_".mt_rand(1000,9999);
+            $user_name_f_count = MobileUsers::where('user_name',$f_name)->count();
+            if(  $user_name_f_count == 0){
+                $suggestion_name[] = $f_name;
+            }else{
+                $i--;
+            }
+        }
+        
+            $user_status = true;          
+            $user_message = "User-name is available you use along with it you can use other suggestion name";
+            $user_isAvailable = true;
+            $user_avaliable_username = $suggestion_name;
+       
+    }else{
+
+        for($i = 0; $i < 3; $i++){
+            $full_name = $request->full_name;
+            $f_name = substr($full_name, 0 ,4) ."@". mt_rand(1000,9999);
+            $user_name_f_count = MobileUsers::where('user_name',$f_name)->count();
+            if(  $user_name_f_count == 0){
+                $suggestion_name[] = $f_name;
+            }else{
+                $i--;
+            }
+        }
+            $user_status = true;
+            $user_message = "User-name suggestion";
+            $user_isAvailable  = false;
+            $user_avaliable_username  = $suggestion_name;
+        
+    }
+    $user_phone_count = MobileUsers::where('phone_no',$request->phone_no)->count();     
+    if( $user_phone_count == 0){
+       
+            $user_mobile_status = true;
+            $user_mobile_message = "Mobile number is availabe";
+      
+    }else{
+            $user_mobile_status = false;
+            $user_mobile_message = "Mobile number is not availabe";
+      
+    }
+
+    $user_mail_count = MobileUsers::where('email',$request->email)->count();
+    if( $user_mail_count == 0){
+        
+            $user_mail_status = true;
+            $user_mail_message = "User Email is availabe";
+      
+    }else{
+      
+            $user_mail_status = false;
+            $user_mail_message = "User Email is not availabe";
+       
+    }
+
+    return response()->json([
+        "status" => true,            
+        "user_name_status" =>  $user_status,
+        "user_name_message" => $user_message,
+        "user_name_isAvailable" => $user_isAvailable,
+        "user_name_avaliable" => $user_avaliable_username,
+        "user_mobile_status" => $user_mobile_status,
+        "user_mobile_message" =>$user_mobile_message,
+        "user_mail_status" => $user_mail_status,
+        "user_mail_message" =>  $user_mail_message
+    ], 200);
+
+   }
+   
    // function for the existing of user_name and suggestion of user-names
    public function check_username(Request $request){
 
