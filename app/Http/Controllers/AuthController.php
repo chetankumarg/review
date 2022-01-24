@@ -36,6 +36,10 @@ class AuthController extends Controller
     {
         return view('registration');
     }
+
+    public function viewReview(){
+        return view('viewreview');
+    }
      
     public function postLogin(Request $request)
     {
