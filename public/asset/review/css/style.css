@@ -1,0 +1,101 @@
+body{
+    background: #F5F6F7;
+}
+
+.logo{
+    width: 100%;
+}
+.header{
+    width: 100%;
+}
+
+footer{
+    text-align: center;
+    background: url("../images/footer-bg.png") no-repeat;
+    width: 100%;
+    position: fixed;
+    bottom: 0px;
+}
+
+.footer h3{
+    font-size: 24px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    font-weight: 300;
+}
+.card{
+    margin: auto;
+    border: none;
+    background: #FFFFFF;
+    box-shadow: 0 8px 14px 0 #F0F4F2;
+    border-radius: 15px;
+    margin-bottom: 180px;
+}
+.card .header-name{
+    padding: 20px 30px;
+    color: #3B4A49;
+}
+
+.content-body .title{
+    font-size: 16px;
+}
+
+.content-body .title span{
+    color: #307098;
+}
+
+.content-body p{
+    font-size: 13px;
+}
+
+.link-block{
+    font-size: 14px;
+    color: #307098;
+}
+
+.link-block img{
+    padding-right: 10px;
+}
+
+.content-body{
+    padding: 20px 30px;
+}
+
+.cta-block{
+    padding: 10px 30px;
+    border-top: 1px solid #f7f7f7;
+    font-size: 14px;
+}
+
+.card .name{
+    font-size: 14px;
+    line-height: 16px;
+}
+.card .time{
+    font-size: 10px;
+    color: #3B4A49;
+}
+
+.like{
+    padding-right: 10px;
+}
+
+.comment{
+    padding-right: 10px
+}
+
+.image-slider{
+    padding: 1px 32px;
+}
+
+.image-slider img{
+    width: 100%;
+}
+
+.follow-btn .btn{
+    text-transform: uppercase;
+    background: #053246;
+    padding: 4px 12px;
+    font-size: 12px;
+    font-weight: 600;
+}

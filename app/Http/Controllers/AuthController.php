@@ -105,4 +105,8 @@ class AuthController extends Controller
         Auth::logout();
         return Redirect('login');
     }
+
+    public function disp_review(){
+        return view('display_review');
+    }
 }
