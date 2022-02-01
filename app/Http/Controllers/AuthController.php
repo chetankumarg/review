@@ -8,6 +8,7 @@ Use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use App\Models\MobileUsers;
+use App\Models\Review;
 use Session;
 use DB;
  
@@ -108,5 +109,13 @@ class AuthController extends Controller
 
     public function disp_review(){
         return view('display_review');
+    }
+
+    public function review_disp($id){
+
+      $reviewdetail = Review::where('id',$id)->get();
+
+
+      return view('reviewdetail', compact('reviewdetail','review_userid'));
     }
 }
