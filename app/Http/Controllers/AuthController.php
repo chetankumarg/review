@@ -112,10 +112,15 @@ class AuthController extends Controller
     }
 
     public function review_disp($id){
+      // $reviewdetail = DB::table('reviews')
+      //                   ->join('mobile_users', 'reviews.mobile_user_id', '=', 'mobile_users.id')
+      //                   ->where('mobile_user_id', $id)
+      //                   ->get();
 
-      $reviewdetail = Review::where('id',$id)->get();
+      $reviewdetail = Review::join('mobile_users', 'reviews.mobile_user_id', '=', 'mobile_users.id')
+                             ->where('reviews.id', $id)
+                             ->get(['reviews.*', 'mobile_users.full_name','mobile_users.profile_picture']);  
 
-
-      return view('reviewdetail', compact('reviewdetail','review_userid'));
+      return view('reviewdetail', compact('reviewdetail'));
     }
 }

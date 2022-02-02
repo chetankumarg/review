@@ -25,6 +25,17 @@
     <link href="cover.css" rel="stylesheet">
 </head>
 <body class=" h-100">
+<div class="header">
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <div class="logo text-center py-5">
+                    <!-- <img class="m-auto" src="{{ URL::asset('/asset/review/images/dummylogo.png') }}"/> -->
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 
 <?php
         foreach($reviewdetail as $data)
@@ -38,19 +49,32 @@
                     <div class="header-name">
                         <div class="row align-items-center">
                             <div class="col-1 p-0">
-                                <div class="avartar"><img src="{{ URL::asset('/asset/review/images/avatar.png') }}"/> </div>
+                                <div class="avartar">
+                                    <?php if(empty($data->profile_picture)){?>
+                                        <img src="{{ URL::asset('/asset/review/images/avatar.png') }}"/> 
+                                    <?php }else{ ?>
+                                        <img src="<?php echo $data->profile_picture; ?>"/>    
+                                    <?php } ?>
+                                </div>
                             </div>
                             <div class="col-11 ">
-                                <div class="name">Alice Krejčová</div>
-                                <div class="time">26 minutes ago</div>
+                                <div class="name"><?php echo $data->full_name; ?></div>
+                                <div class="time"><?php echo $data->created_at->diffForHumans(); ?></div>
                             </div>
                         </div>
                     </div>
                     <div class="image-slider">
+                        <?php 
+                        $img_first = explode(",",$data->image);                       
+                         echo  substr($img_first[0], 28);
+                         if(empty($img_first[0])){  ?>
                         <div class="img"><img src="{{ URL::asset('/asset/review/images/img.png') }}"></div>
+                        <?php }else{  ?>
+                            <div class="img"><img src="/<?php echo substr($img_first[0], 28);?>"></div>
+                             <?php } ?>
                     </div>
                     <div class="content-body">
-                        <div class="title"><?php echo $data->title; ?> - <span><?php echo $data->hashtags; ?></span></div>
+                        <div class="title"><p><?php echo $data->name; ?> - <span><?php echo $data->hashtags; ?></span></p></div>
                         <div class="description"><p><?php echo $data->description; ?>  </p></div>
                         <div class="link-block"><img src="{{ URL::asset('/asset/review/images/link-icon.png') }}"> www.amazon.com/apple/iphone14 </div>
                     </div>

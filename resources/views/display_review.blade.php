@@ -21,7 +21,17 @@
     <link href="cover.css" rel="stylesheet">
 </head>
 <body class=" h-100">
-
+<div class="header">
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <div class="logo text-center py-5">
+                    <img class="m-auto" src="{{ URL::asset('/asset/review/images/dummylogo.png') }}"/>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 <div class="main-body">
     <div class="container">
         <div class="row align-content-center justify-content-center">
@@ -44,7 +54,7 @@
                     <div class="content-body">
                         <div class="title">Parrot In The Oven - <span>#Victor</span> <span>#Martinez<span></div>
                         <div class="description"><p>It’s obvious that Amazon is trying to make its Alexa personal assistant as ubiquitous as possible. At today’s marathon product introduction, the company debuted a wide variety of its Echo-branded #Alexa-powered #products, both for the home and for the outdoors. It’s obvious that Amazon is trying to make its Alexa personal assistant as ubiquitous as possible. </p></div>
-                        <div class="link-block"><img src="{{ URL::asset('/asset/review/images/link-icon.png') }}"> www.amazon.com/apple/iphone14 </div>
+                        <div class="link-block"><img src="{{ URL::asset('/asset/review/images/img.png') }}"> www.amazon.com/apple/iphone14 </div>
                     </div>
                     <div class="content-footer">
                         <div class="cta-block">
