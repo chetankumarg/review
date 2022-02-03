@@ -5,11 +5,24 @@
     <meta charset="utf-8">
      <meta name="viewport" content="width=device-width, initial-scale=1">
                                  <?php  foreach($reviewdetail as $data)
-                                    { ?>
+                                    { 
+                                        $img_first = explode(",",$data->image);                       
+                                        
+                                        ?>
                                         <meta name="description" content="<?php echo $data->description; ?>">
                                         <meta name="author" content="Mark Otto, Jacob Thornton, and Bootstrap contributors">
                                         <meta name="generator" content="Hugo 0.88.1">
                                         <title><?php echo $data->name; ?></title>
+
+                                        <!-- Twitter Card data -->
+                                        <meta name="twitter:card" value="<?php echo $data->description; ?>">
+
+                                        <!-- Open Graph data -->
+                                        <meta property="og:title" content="<?php echo $data->name; ?>" />
+                                        <meta property="og:type" content="review" />
+                                        <!-- <meta property="og:url" content="http://www.example.com/" /> -->
+                                        <meta property="og:image" content="<?php echo substr($img_first[0], 28); ?>" />
+                                        <meta property="og:description" content="<?php echo $data->description; ?>" />
                                  <?php   }
                                     ?>  
 
