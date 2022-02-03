@@ -53,7 +53,7 @@
                                     <?php if(empty($data->profile_picture)){?>
                                         <img src="{{ URL::asset('/asset/review/images/avatar.png') }}"/> 
                                     <?php }else{ ?>
-                                        <img src="<?php echo $data->profile_picture; ?>"/>    
+                                        <img src="/<?php echo substr($data->profile_picture, 28); ?>"/>    
                                     <?php } ?>
                                 </div>
                             </div>
@@ -66,7 +66,7 @@
                     <div class="image-slider">
                         <?php 
                         $img_first = explode(",",$data->image);                       
-                         echo  substr($img_first[0], 28);
+                        // echo  substr($img_first[0], 28);
                          if(empty($img_first[0])){  ?>
                         <div class="img"><img src="{{ URL::asset('/asset/review/images/img.png') }}"></div>
                         <?php }else{  ?>

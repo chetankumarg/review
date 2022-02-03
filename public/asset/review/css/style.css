@@ -99,3 +99,8 @@ footer{
     font-size: 12px;
     font-weight: 600;
 }
+.avartar img{
+    width:  30px;
+    height:  30px;
+    border-radius:  15px;
+}
