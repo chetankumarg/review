@@ -123,4 +123,12 @@ class AuthController extends Controller
 
       return view('reviewdetail', compact('reviewdetail'));
     }
+
+    public function review_detail($id){
+      $reviewdetail = Review::join('mobile_users', 'reviews.mobile_user_id', '=', 'mobile_users.id')
+                             ->where('reviews.shorturl', $id)
+                             ->get(['reviews.*', 'mobile_users.full_name','mobile_users.profile_picture']);  
+
+      return view('reviewdetail', compact('reviewdetail'));      
+    }
 }

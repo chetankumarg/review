@@ -440,6 +440,7 @@ class ApiController extends Controller
         $mobileReview->usr_long = $request->usr_long;
         $mobileReview->rating = $request->rating;
         $mobileReview->categorie_id = $request->categorie_id;
+        $mobileReview->shorturl = substr(str_shuffle("0123456789abcdefghijklmnopqrstvwxyz"), 0, 6);
         $mobileReview->publish = "1";
 
         $mobileReview->save();

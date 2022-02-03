@@ -31,3 +31,4 @@ Route::get('logout', 'App\Http\Controllers\AuthController@logout');
 Route::get('docs', 'App\Http\Controllers\AuthController@swaggerlist');
 Route::get('review_prod', 'App\Http\Controllers\AuthController@disp_review');
 Route::get('review/{id}', 'App\Http\Controllers\AuthController@review_disp');
+Route::get('review_detail/{id}', 'App\Http\Controllers\AuthController@review_detail');
