@@ -104,3 +104,11 @@ footer{
     height:  30px;
     border-radius:  15px;
 }
+.image-slider {
+    padding: 1px 32px;
+    height: 340px;
+    overflow: hidden;
+}
+.content-body .title p {
+    font-size: 16px;
+}
