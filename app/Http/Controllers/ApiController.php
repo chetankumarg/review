@@ -933,12 +933,14 @@ class ApiController extends Controller
 
     public function getpost_review(Request $request){
         $userid = $request->uid;
+        $start = (!empty($request->start)) ? $request->start : 0;
+        $end = (!empty($request->end)) ? $request->end : 10;
         $postdata = array();
         $get_reviewcount = Review::where('mobile_user_id',$userid)->count();
         if($get_reviewcount > 0){
         $post_review = Review::where('mobile_user_id', $userid)
-        ->skip(0)
-        ->take(10)
+        ->skip($start)
+        ->take($end)
         ->get();
 
             foreach($post_review as $data)
