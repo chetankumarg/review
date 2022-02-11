@@ -931,6 +931,43 @@ class ApiController extends Controller
          }
  }
 
+    public function getpost_review(Request $request){
+        $userid = $request->uid;
+        $postdata = array();
+        $get_reviewcount = Review::where('mobile_user_id',$userid)->count();
+        if($get_reviewcount > 0){
+        $post_review = Review::where('mobile_user_id', $userid)->get();
+
+            foreach($post_review as $data)
+                                        {                                      
+                                        $postdata["id"] = $data->id;
+                                        $postdata["name"] = $data->name;  // $petani is a Std Class Object here
+                                        $postdata["hashtags"] = $data->hashtags;
+                                        $postdata["mobile_user_id"] = $data->mobile_user_id;
+                                        $postdata["description"] = $data->description;
+                                        $postdata["image"] = $data->image;
+                                        $postdata["rating"] = $data->rating;
+                                        $postdata["shorturl"] = $data->shorturl;
+                                        $postdata["lat"] = $data->lat;
+                                        $postdata["long"] = $data->long;
+                                        $postdata["usr_lat"] = $data->usr_lat;
+                                        $postdata["usr_long"] = $data->usr_long;
+                                        $postdata["created_at"] = $data->created_at;
+                                        $postcontianer[] = $postdata;
+                                        }
+                                    
+            return response()->json([
+                    "status" => true,
+                    "userdetails" => $postcontianer
+            ], 200); 
+        }else{
+            return response()->json([
+                "status" => false,
+                "message" => "No post-review created by this user"
+            ], 200); 
+        }  
+    }
+
     public function get_jsonurl(Request $request){
 
         $url = $request->url;
