@@ -941,6 +941,7 @@ class ApiController extends Controller
         $post_review = Review::where('mobile_user_id', $userid)
         ->skip($start)
         ->take($end)
+        ->orderBy('id', 'desc')
         ->get();
 
             foreach($post_review as $data)
