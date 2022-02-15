@@ -972,10 +972,45 @@ class ApiController extends Controller
         } 
     }
 
+    public function get_all_post_review(){
+        $postdata = array();
+        $get_reviewcount = Review::count();
+        if($get_reviewcount > 0){
+        $post_review = Review::orderBy('created_at', 'DESC')->get();
+            foreach($post_review as $data)
+                                        {                                      
+                                        $postdata["id"] = $data->id;
+                                        $postdata["name"] = $data->name;  // $petani is a Std Class Object here
+                                        $postdata["hashtags"] = $data->hashtags;
+                                        $postdata["mobile_user_id"] = $data->mobile_user_id;
+                                        $postdata["description"] = $data->description;
+                                        $postdata["image"] = str_replace("/var/www/html/review/public/","http://139.59.76.151/",$data->image);
+                                        $postdata["rating"] = $data->rating;
+                                        $postdata["shorturl"] = $data->shorturl;
+                                        $postdata["lat"] = $data->lat;
+                                        $postdata["long"] = $data->long;
+                                        $postdata["usr_lat"] = $data->usr_lat;
+                                        $postdata["usr_long"] = $data->usr_long;
+                                        $postdata["created_at"] = $data->created_at;
+                                        $postcontianer[] = $postdata;
+                                        }
+                                    
+            return response()->json([
+                    "status" => true,
+                    "userdetails" => $postcontianer
+            ], 200); 
+        }else{
+            return response()->json([
+                "status" => false,
+                "message" => "No post-review created by this user"
+            ], 200); 
+        }        
+    }
+
     public function getpost_review(Request $request){
         $userid = $request->uid;
-        $start = (!empty($request->start)) ? $request->start : 0;
-        $end = (!empty($request->end)) ? $request->end : 10;
+        $start = (!empty($request->start)) ? $request->start - 1 : 0;
+        $end = (!empty($request->end)) ? $request->end - 1 : 10;
         $postdata = array();
         $get_reviewcount = Review::where('mobile_user_id',$userid)->count();
         if($get_reviewcount > 0){
@@ -992,7 +1027,7 @@ class ApiController extends Controller
                                         $postdata["hashtags"] = $data->hashtags;
                                         $postdata["mobile_user_id"] = $data->mobile_user_id;
                                         $postdata["description"] = $data->description;
-                                        $postdata["image"] = $data->image;
+                                        $postdata["image"] = str_replace("/var/www/html/review/public/","http://139.59.76.151/",$data->image);
                                         $postdata["rating"] = $data->rating;
                                         $postdata["shorturl"] = $data->shorturl;
                                         $postdata["lat"] = $data->lat;

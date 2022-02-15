@@ -55,3 +55,4 @@ Route::post('mobileUser/create_post', 'App\Http\Controllers\ApiController@create
 // function to get the postreview by user_id
 Route::post('getpostreview_by_id', 'App\Http\Controllers\ApiController@getpost_review_by_shortcode');
 Route::post('getpostreview', 'App\Http\Controllers\ApiController@getpost_review');
+Route::get('getall_postreview', 'App\Http\Controllers\ApiController@get_all_post_review');
