@@ -971,7 +971,11 @@ class ApiController extends Controller
             ], 200); 
         } 
     }
-
+    
+    public function delete_all_post_review(){
+        Review::truncate();
+    }
+    
     public function get_all_post_review(){
         $postdata = array();
         $get_reviewcount = Review::count();
