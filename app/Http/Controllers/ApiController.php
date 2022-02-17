@@ -12,6 +12,7 @@ use Plivo\RestClient;
 use DB;
 use Illuminate\Support\Facades\Storage;
 use App\Http\Helpers\AppHelper;
+use Image;
 
 class ApiController extends Controller
 {
@@ -694,14 +695,26 @@ class ApiController extends Controller
             $image = $request->file('upload_img');
             $imageName = random_int(10000, 99999)."-".time() . '.' . $image->getClientOriginalExtension();
             $destinationPath = public_path('/uploads/post_media/');
+
+            $destinationPath_small = 'uploads/post_media/thumbnail';
+
+            $img = Image::make($image->path());    
+            $img->resize(250, 120, function ($constraint) {    
+                $constraint->aspectRatio();    
+            })->save($destinationPath_small.'/'.$imageName);
+
+
            // $image->move($destinationPath, $imageName);
             if( $image->move($destinationPath, $imageName) ){
                 $file_path =$destinationPath."".$imageName;
+                $file_thumbnail = $destinationPath_small.'/'.$imageName;
+
                 return response()->json([
                     "status" => 200,                         
                     "message" => "Image has been uploaded successfully",
                     "img_url" => $file_path,
-                    "image_url" => env('APP_URL'). "/uploads/post_media/".$imageName
+                    "image_url" => env('APP_URL'). "/uploads/post_media/".$imageName,
+                    "image_thumbnail" => env('APP_URL')."/".$file_thumbnail
                 ], 200);
             }else{
 
@@ -975,7 +988,7 @@ class ApiController extends Controller
     public function delete_all_post_review(){
         Review::truncate();
     }
-    
+
     public function get_all_post_review(){
         $postdata = array();
         $get_reviewcount = Review::count();
