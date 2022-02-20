@@ -32,6 +32,7 @@ class ApiController extends Controller
   );
 
     header('Content-Type: application/json');
+    return json_encode($response);
     return json_encode($response->statusCode);
    }
    // function used to get the user details by phone-no:
@@ -699,7 +700,7 @@ class ApiController extends Controller
             $destinationPath_small = 'uploads/post_media/thumbnail';
 
             $img = Image::make($image->path());    
-            $img->resize(250, 120, function ($constraint) {    
+            $img->resize(300, 200, function ($constraint) {    
                 $constraint->aspectRatio();    
             })->save($destinationPath_small.'/'.$imageName);
 
