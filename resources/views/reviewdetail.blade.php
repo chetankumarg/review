@@ -83,7 +83,7 @@
                          if(empty($img_first[0])){  ?>
                         <div class="img"><img src="{{ URL::asset('/asset/review/images/img.png') }}"></div>
                         <?php }else{  ?>
-                            <div class="img"><img src="/<?php echo $img_first[0]; ?>"></div>
+                            <div class="img"><img src="<?php echo $img_first[0]; ?>"></div>
                              <?php } ?>
                     </div>
                     <div class="content-body">
