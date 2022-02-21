@@ -703,10 +703,10 @@ class ApiController extends Controller
 
             $destinationPath_small = 'uploads/post_media/thumbnail';
 
-            $img = Image::make($image->path());    
-            $img->resize(300, 200, function ($constraint) {    
-                $constraint->aspectRatio();    
-            })->save($destinationPath_small.'/'.$imageName);
+            // $img = Image::make($image->path());    
+            // $img->resize(300, 200, function ($constraint) {    
+            //     $constraint->aspectRatio();    
+            // })->save($destinationPath_small.'/'.$imageName);
 
 
            // $image->move($destinationPath, $imageName);
@@ -718,8 +718,8 @@ class ApiController extends Controller
                     "status" => 200,                         
                     "message" => "Image has been uploaded successfully",
                     "img_url" => $file_path,
-                    "image_url" => env('APP_URL'). "/uploads/post_media/".$imageName,
-                    "image_thumbnail" => env('APP_URL')."/".$file_thumbnail
+                    "image_url" => env('APP_URL'). "/uploads/post_media/".$imageName
+                    // "image_thumbnail" => env('APP_URL')."/".$file_thumbnail
                 ], 200);
             }else{
 
