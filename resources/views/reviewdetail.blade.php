@@ -21,7 +21,7 @@
                                         <meta property="og:title" content="<?php echo $data->name; ?>" />
                                         <meta property="og:type" content="review" />
                                         <!-- <meta property="og:url" content="http://www.example.com/" /> -->
-                                        <meta property="og:image" content="<?php echo substr($img_first[0], 28); ?>" />
+                                        <meta property="og:image" content="<?php echo $img_first[0]; ?>" />
                                         <meta property="og:description" content="<?php echo $data->description; ?>" />
                                  <?php   }
                                     ?>  
@@ -83,7 +83,7 @@
                          if(empty($img_first[0])){  ?>
                         <div class="img"><img src="{{ URL::asset('/asset/review/images/img.png') }}"></div>
                         <?php }else{  ?>
-                            <div class="img"><img src="/<?php echo substr($img_first[0], 28);?>"></div>
+                            <div class="img"><img src="/<?php echo $img_first[0]; ?>"></div>
                              <?php } ?>
                     </div>
                     <div class="content-body">

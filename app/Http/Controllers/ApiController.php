@@ -454,7 +454,7 @@ class ApiController extends Controller
                   "status" => true,
                   "message" => "mobileReview record created",
                   "post_id" => $mobileReview->id,
-                  "short_url" => $short_url 
+                  "short_url" =>env('APP_URL'). "review_detail/". $short_url 
               ], 200);
           }else{
               return response()->json([
