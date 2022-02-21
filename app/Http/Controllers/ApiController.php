@@ -430,6 +430,8 @@ class ApiController extends Controller
   // function to create the review (post) by the mobile user api...
     public function create_review(Request $request){
 
+        $short_url = substr(str_shuffle("0123456789abcdefghijklmnopqrstvwxyz"), 0, 6);
+
         $mobileReview = new Review;
         $mobileReview->name = $request->name;
         $mobileReview->hashtags = $request->hashtags;
@@ -442,7 +444,7 @@ class ApiController extends Controller
         $mobileReview->usr_long = $request->usr_long;
         $mobileReview->rating = $request->rating;
         $mobileReview->categorie_id = $request->categorie_id;
-        $mobileReview->shorturl = substr(str_shuffle("0123456789abcdefghijklmnopqrstvwxyz"), 0, 6);
+        $mobileReview->shorturl = $short_url;
         $mobileReview->publish = "1";
 
         $mobileReview->save();
@@ -450,7 +452,9 @@ class ApiController extends Controller
         if($mobileReview){
               return response()->json([
                   "status" => true,
-                  "message" => "mobileReview record created"
+                  "message" => "mobileReview record created",
+                  "post_id" => $mobileReview->id,
+                  "short_url" => $short_url 
               ], 200);
           }else{
               return response()->json([
