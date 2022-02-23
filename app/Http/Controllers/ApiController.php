@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 use App\Models\MobileUsers;
 use App\Models\followers;
 use App\Models\Review;
+use App\Models\categories;
 use App\Models\MobileAuthentication;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -1070,6 +1071,25 @@ class ApiController extends Controller
                 "message" => "No post-review created by this user"
             ], 200); 
         }  
+    }
+
+    public function getcategorie_list(Request $request){
+
+        
+         $get_categories = categories::all();
+         $categorie_data = array();
+
+         foreach($get_categories as $data)
+         {                                      
+         $categorie_data["id"] = $data->id;
+         $categorie_data["name"] = $data->name;  // $petani is a Std Class Object here
+         $categorie_contianer[] = $categorie_data;
+         }
+     
+         return response()->json([
+            "status" => true,
+            "categories" => $categorie_contianer
+            ], 200);
     }
 
     public function get_jsonurl(Request $request){
