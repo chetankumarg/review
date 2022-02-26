@@ -60,3 +60,24 @@ Route::get('getcategories_list', 'App\Http\Controllers\ApiController@getcategori
 
 Route::get('getall_postreview', 'App\Http\Controllers\ApiController@get_all_post_review');
 Route::get('delete_all_postreview', 'App\Http\Controllers\ApiController@delete_all_post_review');
+
+// function for the like review post.
+
+// api for liking the post.
+Route::post('mobileUser/like_the_post', 'App\Http\Controllers\ApiController@like_the_post');
+// api for un-do like the post
+Route::post('mobileUser/delete_like_post', 'App\Http\Controllers\ApiController@undo_like_the_post');
+// api to get the total count of likes of the post
+Route::post('mobileUser/count_like_post', 'App\Http\Controllers\ApiController@count_like_post');
+// api is to get list of users liked by the posts.
+Route::post('mobileUser/users_liked_post', 'App\Http\Controllers\ApiController@users_liked_post');
+// api check whether the current post is liked by the user or not.
+Route::post('mobileUser/check_user_likepost', 'App\Http\Controllers\ApiController@check_user_likepost');
+
+
+// api function for the follow/unfollow users list
+
+// api to follow the users.
+Route::post('mobileUser/follow_user', 'App\Http\Controllers\ApiController@follow_user');
+// api to unfollow the users.
+Route::post('mobileUser/unfollow_user', 'App\Http\Controllers\ApiController@unfollow_user');

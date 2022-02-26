@@ -5,6 +5,7 @@ use App\Models\MobileUsers;
 use App\Models\followers;
 use App\Models\Review;
 use App\Models\categories;
+use App\Models\Likes;
 use App\Models\MobileAuthentication;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -1149,4 +1150,183 @@ class ApiController extends Controller
 
     }
 
+
+     // function to create the review (post) by the mobile user api...
+     public function like_the_post(Request $request){
+
+        $likeReviews = new Likes;
+        $likeReviews->post_id = $request->post_id;
+        $likeReviews->user_id = $request->mobile_user_id;
+        $likeReviews->save();
+       
+        if($likeReviews){
+              return response()->json([
+                  "status" => true,
+                  "message" => "You have liked this post"
+              ], 200);
+          }else{
+              return response()->json([
+                  "status" => false,
+                  "message" => "No like this post is created yet."
+              ], 200);
+          }
+
+    }
+    // function to un-do the like post
+    public function undo_like_the_post(Request $request){
+
+        $post_id = $request->post_id;
+        $user_id = $request->mobile_user_id;
+
+        $Like = Likes::where('post_id',$post_id)->where('user_id',$user_id)->delete();
+        if($Like){
+            return response()->json([
+                "status" => true,
+                "message" => "Deleted Successfully"
+            ], 200);
+        }else{
+            return response()->json([
+                "status" => false,
+                "message" => "Not Deleted Successfully."
+            ], 200);
+        }
+    }
+ 
+    // function to get the count of like posts.
+    public function count_like_post(Request $request){
+        $post_id = $request->post_id;
+        $confirmed_likes = Likes::where('post_id', $post_id)->count();
+
+        if($confirmed_likes > 0 ){
+            return response()->json([
+                "status" => true,
+                "message" => "No of likes",
+                "likes_count" => $confirmed_likes
+            ], 200);
+        }else{
+            return response()->json([
+                "status" => false,
+                "message" => "No of likes",
+                "likes_count" => 0
+            ], 200);
+        }
+    }
+    
+    // function list of users liked the posts.
+    public function users_liked_post(Request $request){
+        $post_id = $request->post_id;
+           
+        $result = DB::table("likes as l")
+        ->join("mobile_users as mu","l.user_id","=","mu.id")
+        ->where('l.post_id',$post_id)
+        ->select("mu.id", 
+                "mu.user_name","mu.full_name","mu.email")
+        ->get();     
+        
+        if(count($result) == 0){
+            return response()->json([
+                "status" => false,
+                "message" => "No one liked this post"
+            ], 200);  
+        }else{
+
+            foreach($result as $data)
+                    {                                      
+                      $eventdata["id"] = $data->id;
+                      $eventdata["user_name"] = $data->user_name;  // $petani is a Std Class Object here
+                      $eventdata["full_name"] = $data->full_name;
+                      $eventdata["email"] = $data->email;
+                      $eventcontianer[] = $eventdata;
+                    }
+            
+            return response()->json([
+                "status" => true,
+                "message" => "User list liked this post",
+                "userdetails" => $eventcontianer
+            ], 201); 
+
+        }
+    }
+
+    public function check_user_likepost(Request $request){
+        $post_id = $request->post_id;
+        $user_id = $request->mobile_user_id;
+
+        $Like = Likes::where('post_id',$post_id)->where('user_id',$user_id)->count();
+
+        if($Like == 0){
+            return response()->json([
+                "status" => true,
+                "message" => "This post is not yet liked"
+            ], 200); 
+        }else{
+            return response()->json([
+                "status" => false,
+                "message" => "This post is already liked by this user"
+            ], 200); 
+        }
+    }
+
+
+     // function to create the review (post) by the mobile user api...
+     public function follow_user(Request $request){
+
+        $user_id = $request->user_id;
+        $follower_id = $request->current_user_id; // current user id ..
+
+        $followers_count = followers::where('user_id',$user_id)->where('follower_id',$follower_id)->count();
+        
+        if($followers_count == 0){
+            $followers = new followers;
+            $followers->user_id = $request->user_id;
+            $followers->follower_id = $request->current_user_id; // current user id ..
+            $followers->save();
+        
+            if($followers){
+                return response()->json([
+                    "status" => true,
+                    "message" => "You are successfully following"
+                ], 200);
+            }else{
+                return response()->json([
+                    "status" => false,
+                    "message" => "You are not successfully following."
+                ], 200);
+            }
+        }else{
+            return response()->json([
+                "status" => false,
+                "message" => "You are not already following."
+            ], 200);
+        }    
+    }
+
+    // function to create the review (post) by the mobile user api...
+    public function unfollow_user(Request $request){
+
+            $user_id = $request->user_id;
+            $follower_id = $request->current_user_id; // current user id ..
+    
+            $followers_count = followers::where('user_id',$user_id)->where('follower_id',$follower_id)->count();
+            
+            if($followers_count == 1){
+              $followers = followers::where('user_id',$user_id)->where('follower_id',$follower_id)->delete();
+                if($followers){
+                    return response()->json([
+                        "status" => true,
+                        "message" => "You are successfully un-following"
+                    ], 200);
+                }else{
+                    return response()->json([
+                        "status" => false,
+                        "message" => "You are not successfully un-following."
+                    ], 200);
+                }
+            }else{
+                return response()->json([
+                    "status" => false,
+                    "message" => "You are not already unfollowing."
+                ], 200);
+            }    
+    }
 }
