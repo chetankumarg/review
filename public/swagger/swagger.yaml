@@ -494,7 +494,7 @@ paths:
         '400':
           description: Bad request  
 
-   /mobileUser/users_liked_post:
+  /mobileUser/users_liked_post:
      post:
       tags:
         - mobileUser/users_liked_post
@@ -548,7 +548,7 @@ paths:
         '400':
           description: Bad request   
 
-   /mobileUser/follow_user:
+  /mobileUser/follow_user:
      post:
       tags:
         - mobileUser/follow_user
@@ -576,7 +576,7 @@ paths:
         '400':
           description: Bad request  
 
-   /mobileUser/unfollow_user:
+  /mobileUser/unfollow_user:
      post:
       tags:
         - mobileUser/unfollow_user
