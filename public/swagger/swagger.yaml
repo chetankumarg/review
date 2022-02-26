@@ -412,6 +412,198 @@ paths:
         '400':
           description: Bad request                   
 
+  /mobileUser/like_the_post:
+     post:
+      tags:
+        - /mobileUser/like_the_post
+      summary: /mobileUser/like_the_post get_upload Media with keyword- upload_img 
+      description: '/mobileUser/like_the_post like the post'
+      operationId: mobileUser/like_the_post like the post
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - in: "body"
+          name: "body"
+          description: "Api to like the post"
+          schema:
+            type: object
+            properties:
+                post_id : 
+                  type: string
+                mobile_user_id :
+                  type: string                
+      responses:
+        '200':
+          description: successful operation
+        '400':
+          description: Bad request 
+
+  /mobileUser/delete_like_post:
+     post:
+      tags:
+        - mobileUser/delete_like_post
+      summary: mobileUser/delete_like_post get_upload Media with keyword- upload_img 
+      description: 'mobileUser/delete_like_post like the post'
+      operationId: mobileUser/delete_like_post like the post
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - in: "body"
+          name: "body"
+          description: "Api to unlike the post"
+          schema:
+            type: object
+            properties:
+                post_id : 
+                  type: string
+                mobile_user_id :
+                  type: string                
+      responses:
+        '200':
+          description: successful operation
+        '400':
+          description: Bad request   
+
+  /mobileUser/count_like_post:
+     post:
+      tags:
+        - mobileUser/count_like_post
+      summary: mobileUser/count_like_post get_upload Media with keyword- upload_img 
+      description: 'mobileUser/count_like_post like the post'
+      operationId: mobileUser/count_like_post like the post
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - in: "body"
+          name: "body"
+          description: "Api to unlike the post"
+          schema:
+            type: object
+            properties:
+                post_id : 
+                  type: string             
+      responses:
+        '200':
+          description: successful operation
+        '400':
+          description: Bad request  
+
+   /mobileUser/users_liked_post:
+     post:
+      tags:
+        - mobileUser/users_liked_post
+      summary: mobileUser/users_liked_post get_upload Media with keyword- upload_img 
+      description: 'mobileUser/users_liked_post like the post'
+      operationId: mobileUser/users_liked_post like the post
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - in: "body"
+          name: "body"
+          description: "Api to unlike the post"
+          schema:
+            type: object
+            properties:
+                post_id : 
+                  type: string             
+      responses:
+        '200':
+          description: successful operation
+        '400':
+          description: Bad request   
+
+  /mobileUser/check_user_likepost:
+     post:
+      tags:
+        - mobileUser/check_user_likepost
+      summary: mobileUser/check_user_like post get_upload Media with keyword- upload_img 
+      description: 'mobileUser/check_user_like post like the post'
+      operationId: mobileUser/check_user_like post like the post
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - in: "body"
+          name: "body"
+          description: "Api to unlike the post"
+          schema:
+            type: object
+            properties:
+                post_id : 
+                  type: string   
+                mobile_user_id :
+                  type: string            
+      responses:
+        '200':
+          description: successful operation
+        '400':
+          description: Bad request   
+
+   /mobileUser/follow_user:
+     post:
+      tags:
+        - mobileUser/follow_user
+      summary: mobileUser/follow_user post get_upload Media with keyword- upload_img 
+      description: 'mobileUser/follow_user post like the post'
+      operationId: mobileUser/follow_user post like the post
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - in: "body"
+          name: "body"
+          description: "Api to unlike the post"
+          schema:
+            type: object
+            properties:
+                user_id : 
+                  type: string   
+                current_user_id :
+                  type: string            
+      responses:
+        '200':
+          description: successful operation
+        '400':
+          description: Bad request  
+
+   /mobileUser/unfollow_user:
+     post:
+      tags:
+        - mobileUser/unfollow_user
+      summary: mobileUser/unfollow_user post get_upload Media with keyword- upload_img 
+      description: 'mobileUser/unfollow_user post like the post'
+      operationId: mobileUser/unfollow_user post like the post
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - in: "body"
+          name: "body"
+          description: "Api to unlike the post"
+          schema:
+            type: object
+            properties:
+                user_id : 
+                  type: string   
+                current_user_id :
+                  type: string            
+      responses:
+        '200':
+          description: successful operation
+        '400':
+          description: Bad request                                        
+
   /mobileUser/get_trending_list?hashtag:
     post:
       tags:
