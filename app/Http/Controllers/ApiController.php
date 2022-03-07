@@ -1345,7 +1345,7 @@ class ApiController extends Controller
             $postdata = array();
             
             if( $category_id > 0){
-                $post_review = Review::where('categorie_id', $userid)
+                $post_review = Review::where('categorie_id', $category_id)
                 ->skip($start)
                 ->take($end)
                 ->orderBy('id', 'desc')
