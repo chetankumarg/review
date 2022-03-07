@@ -1329,4 +1329,55 @@ class ApiController extends Controller
                 ], 200);
             }    
     }
+
+    public function listPostApi(Request $request){
+
+        $user_id = $request->user_id;
+        $type = $request->type;
+
+        if($type == "category" ){
+            $category_id = $request->category_id;
+            $start = $request->start;
+            $end = $request->end;
+
+            $start = (!empty($request->start)) ? $request->start - 1 : 0;
+            $end = (!empty($request->end)) ? $request->end - 1 : 10;
+            $postdata = array();
+            
+            if( $category_id > 0){
+                $post_review = Review::where('categorie_id', $userid)
+                ->skip($start)
+                ->take($end)
+                ->orderBy('id', 'desc')
+                ->get();
+            }else{  
+                $post_review = Review::skip($start)->take($end)->orderBy('id', 'desc')->get();
+            }
+
+        }
+
+            foreach($post_review as $data)
+                                        {                                      
+                                        $postdata["id"] = $data->id;
+                                        $postdata["name"] = $data->name;  // $petani is a Std Class Object here
+                                        $postdata["hashtags"] = $data->hashtags;
+                                        $postdata["mobile_user_id"] = $data->mobile_user_id;
+                                        $postdata["description"] = $data->description;
+                                        $postdata["image"] = str_replace("/var/www/html/review/public/","http://139.59.76.151/",$data->image);
+                                        $postdata["rating"] = $data->rating;
+                                        $postdata["shorturl"] = $data->shorturl;
+                                        $postdata["lat"] = $data->lat;
+                                        $postdata["long"] = $data->long;
+                                        $postdata["usr_lat"] = $data->usr_lat;
+                                        $postdata["usr_long"] = $data->usr_long;
+                                        $postdata["created_at"] = $data->created_at;
+                                        $postcontianer[] = $postdata;
+                                        }
+                                    
+            return response()->json([
+                    "status" => true,
+                    "userdetails" => $postcontianer
+            ], 200); 
+
+    }
 }

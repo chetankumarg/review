@@ -81,3 +81,7 @@ Route::post('mobileUser/check_user_likepost', 'App\Http\Controllers\ApiControlle
 Route::post('mobileUser/follow_user', 'App\Http\Controllers\ApiController@follow_user');
 // api to unfollow the users.
 Route::post('mobileUser/unfollow_user', 'App\Http\Controllers\ApiController@unfollow_user');
+
+// Api for the list of the posts review along with conditions of
+// categories , trending , at the rate , most likes, most views....
+Route::post('mobileUser/listPostApi','App\Http\Controllers\ApiController@listPostApi');
