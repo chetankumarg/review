@@ -1354,30 +1354,30 @@ class ApiController extends Controller
                 $post_review = Review::skip($start)->take($end)->orderBy('id', 'desc')->get();
             }
 
-        }
+                foreach($post_review as $data)
+                {                                      
+                        $postdata["id"] = $data->id;
+                        $postdata["name"] = $data->name;  // $petani is a Std Class Object here
+                        $postdata["hashtags"] = $data->hashtags;
+                        $postdata["mobile_user_id"] = $data->mobile_user_id;
+                        $postdata["description"] = $data->description;
+                        $postdata["image"] = str_replace("/var/www/html/review/public/","http://139.59.76.151/",$data->image);
+                        $postdata["rating"] = $data->rating;
+                        $postdata["shorturl"] = $data->shorturl;
+                        $postdata["lat"] = $data->lat;
+                        $postdata["long"] = $data->long;
+                        $postdata["usr_lat"] = $data->usr_lat;
+                        $postdata["usr_long"] = $data->usr_long;
+                        $postdata["created_at"] = $data->created_at;
+                        $postcontianer[] = $postdata;
+                }
+        
+                return response()->json([
+                "status" => true,
+                "userdetails" => $postcontianer
+                ], 200); 
 
-            foreach($post_review as $data)
-                                        {                                      
-                                        $postdata["id"] = $data->id;
-                                        $postdata["name"] = $data->name;  // $petani is a Std Class Object here
-                                        $postdata["hashtags"] = $data->hashtags;
-                                        $postdata["mobile_user_id"] = $data->mobile_user_id;
-                                        $postdata["description"] = $data->description;
-                                        $postdata["image"] = str_replace("/var/www/html/review/public/","http://139.59.76.151/",$data->image);
-                                        $postdata["rating"] = $data->rating;
-                                        $postdata["shorturl"] = $data->shorturl;
-                                        $postdata["lat"] = $data->lat;
-                                        $postdata["long"] = $data->long;
-                                        $postdata["usr_lat"] = $data->usr_lat;
-                                        $postdata["usr_long"] = $data->usr_long;
-                                        $postdata["created_at"] = $data->created_at;
-                                        $postcontianer[] = $postdata;
-                                        }
-                                    
-            return response()->json([
-                    "status" => true,
-                    "userdetails" => $postcontianer
-            ], 200); 
+        }
 
     }
 }
