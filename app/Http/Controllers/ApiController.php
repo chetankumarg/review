@@ -1345,6 +1345,13 @@ class ApiController extends Controller
             $postdata = array();
             
             if( $category_id > 0){
+                $post_reviews_count = Review::where('categorie_id', $category_id)->count();
+                if( $post_reviews_count == 0){
+                    return response()->json([
+                        "status" => true,
+                        "message" => "No Post review is there in this categories"
+                        ], 200); 
+                }
                 $post_review = Review::where('categorie_id', $category_id)
                 ->skip($start)
                 ->take($end)
@@ -1374,7 +1381,7 @@ class ApiController extends Controller
         
                 return response()->json([
                 "status" => true,
-                "userdetails" => $postcontianer
+                "post_details" => $postcontianer
                 ], 200); 
 
         }
