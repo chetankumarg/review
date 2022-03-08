@@ -6,6 +6,7 @@ use App\Models\followers;
 use App\Models\Review;
 use App\Models\categories;
 use App\Models\Likes;
+use App\Models\Views;
 use App\Models\MobileAuthentication;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -1334,14 +1335,14 @@ class ApiController extends Controller
 
         $user_id = $request->user_id;
         $type = $request->type;
+        $start = (!empty($request->start)) ? $request->start - 1 : 0;
+        $end = (!empty($request->end)) ? $request->end - 1 : 10;
 
         if($type == "category" ){
             $category_id = $request->category_id;
             $start = $request->start;
             $end = $request->end;
 
-            $start = (!empty($request->start)) ? $request->start - 1 : 0;
-            $end = (!empty($request->end)) ? $request->end - 1 : 10;
             $postdata = array();
             
             if( $category_id > 0){
@@ -1361,30 +1362,121 @@ class ApiController extends Controller
                 $post_review = Review::skip($start)->take($end)->orderBy('id', 'desc')->get();
             }
 
-                foreach($post_review as $data)
-                {                                      
-                        $postdata["id"] = $data->id;
-                        $postdata["name"] = $data->name;  // $petani is a Std Class Object here
-                        $postdata["hashtags"] = $data->hashtags;
-                        $postdata["mobile_user_id"] = $data->mobile_user_id;
-                        $postdata["description"] = $data->description;
-                        $postdata["image"] = str_replace("/var/www/html/review/public/","http://139.59.76.151/",$data->image);
-                        $postdata["rating"] = $data->rating;
-                        $postdata["shorturl"] = $data->shorturl;
-                        $postdata["lat"] = $data->lat;
-                        $postdata["long"] = $data->long;
-                        $postdata["usr_lat"] = $data->usr_lat;
-                        $postdata["usr_long"] = $data->usr_long;
-                        $postdata["created_at"] = $data->created_at;
-                        $postcontianer[] = $postdata;
-                }
-        
-                return response()->json([
-                "status" => true,
-                "post_details" => $postcontianer
-                ], 200); 
-
         }
 
+        if($type == "trending" ){
+
+        $post_review = DB::table("reviews as r")
+        ->join("trendings as tr","r.id","=","tr.review_id")
+        ->skip($start)
+        ->take($end)
+        ->orderBy('r.id', 'desc')
+        ->get();     
+        
+            if(count($post_review) == 0){
+                return response()->json([
+                    "status" => false,
+                    "message" => "No one liked this post"
+                ], 200);  
+            }
+
+        }    
+        if($type == "at_the_rate" ){
+
+            $post_review = Review::skip($start)
+            ->take($end)
+            ->orderBy('rating', 'desc')
+            ->orderBy('created_at', 'desc')
+            ->get();
+        }
+
+        if($type == "most_likes"){
+
+            $result = Likes::groupBy('post_id')->select('post_id', DB::raw('count(post_id) as total'))
+            ->skip($start)
+            ->take($end)
+            ->orderBy('total', 'desc')->get();
+            $post_ids = array();
+            
+            foreach($result as $data){
+                $post_ids[] = $data->post_id;
+            }
+
+            $post_review =  DB::table("reviews as rw")
+                    ->join("likes as li","li.post_id","=","rw.id")
+                    ->whereIn('rw.id',$post_ids)
+                    ->select(array('rw.*', DB::raw('COUNT(li.post_id) as post_likes_count')))
+                    ->orderBy(DB::raw('COUNT(li.post_id)','desc'))
+                    ->groupBy("li.post_id")
+                    ->get();
+
+            // return $post_review;       
+        }
+ 
+        if($type == "most_viewed"){
+
+            $result = Views::groupBy('post_id')->select('post_id', DB::raw('count(post_id) as total'))
+            ->skip($start)
+            ->take($end)
+            ->orderBy('total', 'desc')->get();
+            $post_ids = array();
+            
+            foreach($result as $data){
+                $post_ids[] = $data->post_id;
+            }
+
+            $post_review =  DB::table("reviews as rw")
+                    ->join("views as li","li.post_id","=","rw.id")
+                    ->whereIn('rw.id',$post_ids)
+                    ->select(array('rw.*', DB::raw('COUNT(li.post_id) as post_likes_count')))
+                    ->orderBy(DB::raw('COUNT(li.post_id)','desc'))
+                    ->groupBy("li.post_id")
+                    ->get();
+
+            // return $post_review;       
+        }
+        foreach($post_review as $data)
+        {                                      
+                $postdata["id"] = $data->id;
+                $postdata["name"] = $data->name;  // $petani is a Std Class Object here
+                $postdata["hashtags"] = $data->hashtags;
+                $postdata["mobile_user_id"] = $data->mobile_user_id;
+                $postdata["description"] = $data->description;
+                $postdata["image"] = str_replace("/var/www/html/review/public/","http://139.59.76.151/",$data->image);
+                $postdata["rating"] = $data->rating;
+                $postdata["shorturl"] = $data->shorturl;
+                $postdata["lat"] = $data->lat;
+                $postdata["long"] = $data->long;
+                $postdata["usr_lat"] = $data->usr_lat;
+                $postdata["usr_long"] = $data->usr_long;
+                $postdata["created_at"] = $data->created_at;
+                $postcontianer[] = $postdata;
+        }
+
+        return response()->json([
+        "status" => true,
+        "post_details" => $postcontianer
+        ], 200); 
+
+    }
+
+    public function Create_viewCount(Request $request) {
+
+        $postViews = new Views;
+        $postViews->post_id = $request->post_id;
+        $postViews->user_id = $request->user_id;
+        $postViews->save();
+
+        if($postViews){
+            return response()->json([
+                "status" => true,
+                "message" => "You have Views this post"
+            ], 200);
+        }else{
+            return response()->json([
+                "status" => false,
+                "message" => "No Views this post yet."
+            ], 200);
+        }
     }
 }

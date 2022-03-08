@@ -85,3 +85,4 @@ Route::post('mobileUser/unfollow_user', 'App\Http\Controllers\ApiController@unfo
 // Api for the list of the posts review along with conditions of
 // categories , trending , at the rate , most likes, most views....
 Route::post('mobileUser/listPostApi','App\Http\Controllers\ApiController@listPostApi');
+Route::post('mobileUser/create_viewCount','App\Http\Controllers\ApiController@Create_viewCount');
