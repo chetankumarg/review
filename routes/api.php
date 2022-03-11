@@ -86,3 +86,6 @@ Route::post('mobileUser/unfollow_user', 'App\Http\Controllers\ApiController@unfo
 // categories , trending , at the rate , most likes, most views....
 Route::post('mobileUser/listPostApi','App\Http\Controllers\ApiController@listPostApi');
 Route::post('mobileUser/create_viewCount','App\Http\Controllers\ApiController@Create_viewCount');
+
+// Api to get the user details like pic, uname, email , no of follower, no of following, post review created...
+Route::post('mobileUser/user_details_by_id','App\Http\Controllers\ApiController@User_details_By_id');

@@ -1459,6 +1459,46 @@ class ApiController extends Controller
         ], 200); 
 
     }
+    
+    public function User_details_By_id(Request $request) {
+
+        $userid = $request->user_id;
+        $userdata = array();
+        $user_id_count = MobileUsers::where('id',$userid)->count();
+        if($user_id_count == 1){
+        $mobileUsers = MobileUsers::where('id', $userid)->get();
+
+        $reviews_count = Review::where('mobile_user_id', $userid)->count();
+
+        $followers_count = followers::where('user_id', $userid)->count();
+        $followering_count = followers::where('follower_id', $userid)->count();
+
+        foreach($mobileUsers as $data)
+                                    {                                      
+                                      $userdata["id"] = $data->id;
+                                      $userdata["full_name"] = $data->full_name;  // $petani is a Std Class Object here
+                                      $userdata["email"] = $data->email;
+                                      $userdata["username"] = $data->user_name;
+                                      $userdata["phoneno"] = $data->phone_no;
+                                      $userdata["active"] = $data->active;
+                                      $userdata["createdat"] = $data->created_at;
+                                      $userdata["post_review_count"] = $reviews_count;
+                                      $userdata["followers_count"] = $followers_count;
+                                      $userdata["followering_count"] = $followering_count;
+                                    }
+                                    
+        return response()->json([
+                "status" => true,
+                "userdetails" => $userdata
+        ], 201); 
+    }else{
+        return response()->json([
+            "status" => false,
+            "message" => "Userid not present in database"
+    ], 201); 
+    }  
+
+    }
 
     public function Create_viewCount(Request $request) {
 
