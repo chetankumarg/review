@@ -1349,7 +1349,7 @@ class ApiController extends Controller
                 $post_reviews_count = Review::where('categorie_id', $category_id)->count();
                 if( $post_reviews_count == 0){
                     return response()->json([
-                        "status" => true,
+                        "status" => false,
                         "message" => "No Post review is there in this categories"
                         ], 200); 
                 }
