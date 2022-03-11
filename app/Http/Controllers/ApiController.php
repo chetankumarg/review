@@ -1386,7 +1386,6 @@ class ApiController extends Controller
             $post_review = Review::skip($start)
             ->take($end)
             ->orderBy('rating', 'desc')
-            ->orderBy('created_at', 'desc')
             ->get();
         }
 
