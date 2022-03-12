@@ -1402,9 +1402,10 @@ class ApiController extends Controller
             }
 
             $post_review =  DB::table("reviews as rw")
-                    ->join("likes as li","li.post_id","=","rw.id")
+                    ->join("likes as li","li.post_id","=","rw.id") 
+                    ->leftJoin("views as liv","liv.post_id","=","rw.id")                  
                     ->whereIn('rw.id',$post_ids)
-                    ->select(array('rw.*', DB::raw('COUNT(li.post_id) as post_likes_count')))
+                    ->select(array('rw.*', DB::raw('COUNT(li.post_id) as post_likes_count'), DB::raw('COUNT(li.post_id) as post_views_count')))
                     ->orderBy('post_likes_count','desc')
                 //    ->orderBy(DB::raw('COUNT(li.post_id)','desc'))
                     ->groupBy("li.post_id")
@@ -1428,8 +1429,8 @@ class ApiController extends Controller
             $post_review =  DB::table("reviews as rw")
                     ->join("views as li","li.post_id","=","rw.id")
                     ->whereIn('rw.id',$post_ids)
-                    ->select(array('rw.*', DB::raw('COUNT(li.post_id) as post_likes_count')))
-                    ->orderBy(DB::raw('COUNT(li.post_id)','desc'))
+                    ->select(array('rw.*', DB::raw('COUNT(li.post_id) as post_views_count')))
+                    ->orderBy('post_views_count','desc')
                     ->groupBy("li.post_id")
                     ->get();
 
@@ -1451,8 +1452,12 @@ class ApiController extends Controller
                 $postdata["usr_long"] = $data->usr_long;
                 $postdata["created_at"] = $data->created_at;
                 if($type == "most_likes"){
-                   $postdata["post_likes_counts"] = $data->post_likes_count;  
-                }    
+                   $postdata["post_likes_counts"] = $data->post_likes_count; 
+                   $postdata['post_views_count'] = $data->post_views_count; 
+                } 
+                if($type == "most_viewed"){
+                    $postdata['post_views_count'] = $data->post_views_count;
+                }   
                 $postcontianer[] = $postdata;
         }
 
