@@ -1405,7 +1405,8 @@ class ApiController extends Controller
                     ->join("likes as li","li.post_id","=","rw.id")
                     ->whereIn('rw.id',$post_ids)
                     ->select(array('rw.*', DB::raw('COUNT(li.post_id) as post_likes_count')))
-                    ->orderBy(DB::raw('COUNT(li.post_id)','desc'))
+                    ->orderBy('post_likes_count','desc')
+                //    ->orderBy(DB::raw('COUNT(li.post_id)','desc'))
                     ->groupBy("li.post_id")
                     ->get();
 
@@ -1449,6 +1450,9 @@ class ApiController extends Controller
                 $postdata["usr_lat"] = $data->usr_lat;
                 $postdata["usr_long"] = $data->usr_long;
                 $postdata["created_at"] = $data->created_at;
+                if($type == "most_likes"){
+                   $postdata["post_likes_counts"] = $data->post_likes_count;  
+                }    
                 $postcontianer[] = $postdata;
         }
 
