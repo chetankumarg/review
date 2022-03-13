@@ -1485,7 +1485,11 @@ class ApiController extends Controller
                                       $userdata["id"] = $data->id;
                                       $userdata["full_name"] = $data->full_name;  // $petani is a Std Class Object here
                                       $userdata["email"] = $data->email;
-                                      $userdata["user_pic"] = env('APP_URL')."/". str_replace("/var/www/html/review/public/","",$data->profile_picture);
+                                      if(!empty($data->profile_picture)){
+                                        $userdata["user_pic"] = env('APP_URL')."/". str_replace("/var/www/html/review/public/","",$data->profile_picture);
+                                      }else{
+                                        $userdata["user_pic"] = '';  
+                                      }
                                       $userdata["username"] = $data->user_name;
                                       $userdata["phoneno"] = $data->phone_no;
                                       $userdata["active"] = $data->active;
