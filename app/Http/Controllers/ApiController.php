@@ -1437,14 +1437,14 @@ class ApiController extends Controller
             // return $post_review;       
         }
 
-      //  if(empty($post_review)){
+        if(empty($post_review) || $post_review =='' || $post_review == " " ) {
 
             return response()->json([
                 "status" => false,
                 "message" => $post_review
                 ], 200); 
 
-     //   }
+        }
         foreach($post_review as $data)
         {                                      
                 $postdata["id"] = $data->id;
