@@ -1357,7 +1357,7 @@ class ApiController extends Controller
                 ->skip($start)
                 ->take($end)
                 ->orderBy('id', 'desc')
-                ->get();
+                ->get();               
             }else{  
                 $post_review = Review::skip($start)->take($end)->orderBy('id', 'desc')->get();
             }
@@ -1435,6 +1435,15 @@ class ApiController extends Controller
                     ->get();
 
             // return $post_review;       
+        }
+
+        if(empty($post_review)){
+
+            return response()->json([
+                "status" => false,
+                "message" => "No Post is present for this limit.."
+                ], 200); 
+
         }
         foreach($post_review as $data)
         {                                      
