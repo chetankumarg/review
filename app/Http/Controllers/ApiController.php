@@ -1441,7 +1441,7 @@ class ApiController extends Controller
 
             return response()->json([
                 "status" => false,
-                "message" => $post_review
+                "message" => "No Post is present in this limits"
                 ], 200); 
 
         }
