@@ -1331,6 +1331,46 @@ class ApiController extends Controller
             }    
     }
 
+    public function get_post_hashtags(Request $request){
+        $hashtags = $request->hashtags;
+
+        $review_hashtags_counts = Review::where('hashtags', 'LIKE', '%'.$hashtags.'%')->count();
+
+        if($review_hashtags_counts > 0){
+
+            $post_review = Review::where('hashtags', 'LIKE', '%'.$hashtags.'%')->get();
+
+            foreach($post_review as $data)
+            {                                      
+                    $postdata["id"] = $data->id;
+                    $postdata["name"] = $data->name;  // $petani is a Std Class Object here
+                    $postdata["hashtags"] = $data->hashtags;
+                    $postdata["mobile_user_id"] = $data->mobile_user_id;
+                    $postdata["description"] = $data->description;
+                    $postdata["image"] =  env('APP_URL')."/". str_replace("/var/www/html/review/public/","",$data->image);
+                 //   $postdata["image"] = str_replace("/var/www/html/review/public/","http://139.59.76.151/",$data->image);
+                    $postdata["rating"] = $data->rating;
+                    $postdata["shorturl"] = $data->shorturl;
+                    $postdata["lat"] = $data->lat;
+                    $postdata["long"] = $data->long;
+                    $postdata["usr_lat"] = $data->usr_lat;
+                    $postdata["usr_long"] = $data->usr_long;
+                    $postdata["created_at"] = $data->created_at; 
+                    $postcontianer[] = $postdata;
+            }
+    
+                return response()->json([
+                "status" => true,
+                "post_details" => $postcontianer
+                ], 200); 
+
+        }else{
+            return response()->json([
+                "status" => false,
+                "message" => "No Post reveiw is not there in this hashtags."
+                ], 200); 
+        }
+    }
     public function listPostApi(Request $request){
 
         $user_id = $request->user_id;

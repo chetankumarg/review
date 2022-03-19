@@ -89,3 +89,6 @@ Route::post('mobileUser/create_viewCount','App\Http\Controllers\ApiController@Cr
 
 // Api to get the user details like pic, uname, email , no of follower, no of following, post review created...
 Route::post('mobileUser/user_details_by_id','App\Http\Controllers\ApiController@User_details_By_id');
+
+// Api to get the post reviews depending on the hashtags.
+Route::post('mobileUser/get_post_hashtags','App\Http\Controllers\ApiController@get_post_hashtags');
