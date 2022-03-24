@@ -1623,7 +1623,12 @@ class ApiController extends Controller
               //$result_hashtags_count = array_combine($res_hashtags,$review_hashtags_counts);
               
               // $rev_arr_res = array_reverse($result_hashtags_count, true);  
-             
+             if(empty($review_hashtags_counts)){
+                    return response()->json([
+                        "status" => false,
+                        "message" => "No Tredening with not more than 1 hashtags"
+                    ], 200);
+             }
 
               $rev_arr_res = arsort($review_hashtags_counts);
  
@@ -1675,7 +1680,7 @@ class ApiController extends Controller
             return response()->json([
                 "status" => true,
                 "message" => "No Trending Hashtags is available"
-            ], 201);
+            ], 200);
         }
     }
 }
