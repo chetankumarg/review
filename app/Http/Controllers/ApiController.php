@@ -1563,21 +1563,119 @@ class ApiController extends Controller
 
     public function Create_viewCount(Request $request) {
 
-        $postViews = new Views;
-        $postViews->post_id = $request->post_id;
-        $postViews->user_id = $request->user_id;
-        $postViews->save();
+        $viewCounts = Views::where('post_id', $request->post_id)
+                            ->where('user_id', $request->user_id)
+                            ->count();
+        
+        if($viewCounts == 0 ){
 
-        if($postViews){
+            $postViews = new Views;
+            $postViews->post_id = $request->post_id;
+            $postViews->user_id = $request->user_id;
+            $postViews->save();
+
+            if($postViews){
+                return response()->json([
+                    "status" => true,
+                    "message" => "You have Views this post"
+                ], 200);
+            }else{
+                return response()->json([
+                    "status" => false,
+                    "message" => "No Views this post yet."
+                ], 200);
+            }
+        }else{
+                return response()->json([
+                    "status" => false,
+                    "Count" => $viewCounts,
+                    "message" => "Views already counted for this post"
+                ], 200); 
+        }
+    }
+
+    public function get_trending_post(Request $request){
+
+       // $group_hashtags = DB::raw('group_concat(reviews.hashtags)');
+
+        $group_hashtags = Review::select( DB::raw('CONCAT(hashtags) AS hashtags'))
+           ->get();
+       //    ->toArray();
+        foreach($group_hashtags as $data){
+            $hashtags[] = $data->hashtags;
+        }
+
+        //$res_hashtags = array_values( array_flip( array_flip( $hashtags ) ) );
+   
+        $hashtagsList = implode(',', $hashtags);
+        $res_hashtags = explode(',', $hashtagsList);
+        $res_hashtags = array_unique($res_hashtags);
+
+        if( (array_count_values($res_hashtags)) > 0 ){
+
+            foreach ($res_hashtags as $value) {
+                $hash_tags_count = Review::where('hashtags', 'LIKE', '%'.$value.'%')->count(); 
+                if($hash_tags_count > 1){
+                $review_hashtags_counts[$value] = $hash_tags_count;
+                }
+              }
+            
+              //$result_hashtags_count = array_combine($res_hashtags,$review_hashtags_counts);
+              
+              // $rev_arr_res = array_reverse($result_hashtags_count, true);  
+             
+
+              $rev_arr_res = arsort($review_hashtags_counts);
+ 
+              foreach($review_hashtags_counts as $key => $value){
+                 $post_review =  DB::table("reviews as rw")
+                 ->where('rw.hashtags', 'LIKE', '%'.$key.'%')
+                 ->select(array('rw.*'))->get();
+
+                 foreach($post_review as $data)
+                    {                                      
+                        $postcontianer_ids[] = $data->id;
+                    }        
+              }
+     
+                $post_review =  DB::table("reviews as rw")                   
+                    ->whereIn('rw.id', $postcontianer_ids)
+                    ->select(array('rw.*'))
+                    ->orderBy('created_at','desc')
+                    ->get();
+
+                    foreach($post_review as $data)
+                    {                                      
+                            $postdata["id"] = $data->id;
+                            $postdata["name"] = $data->name;  // $petani is a Std Class Object here
+                            $postdata["hashtags"] = $data->hashtags;
+                            $postdata["mobile_user_id"] = $data->mobile_user_id;
+                            $postdata["description"] = $data->description;
+                            $postdata["image"] = env('APP_URL')."/". str_replace("/var/www/html/review/public/","",$data->image);
+                            $postdata["rating"] = $data->rating;
+                            $postdata["shorturl"] = $data->shorturl;
+                            $postdata["lat"] = $data->lat;
+                            $postdata["long"] = $data->long;
+                            $postdata["usr_lat"] = $data->usr_lat;
+                            $postdata["usr_long"] = $data->usr_long;
+                            $postdata["created_at"] = $data->created_at;  
+                            $postcontianer[] = $postdata;
+                    }  
+                     
+
             return response()->json([
                 "status" => true,
-                "message" => "You have Views this post"
-            ], 200);
-        }else{
+                // "post_details" => $postcontianer,
+                "result_hashtags_count" => $review_hashtags_counts,
+                "result_post_detials" => $postcontianer
+               // "result_post_ids" => $postcontianer_ids
+                ], 200); 
+
+        } else{
             return response()->json([
-                "status" => false,
-                "message" => "No Views this post yet."
-            ], 200);
+                "status" => true,
+                "message" => "No Trending Hashtags is available"
+            ], 201);
         }
     }
 }
