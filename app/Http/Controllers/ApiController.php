@@ -1615,7 +1615,7 @@ class ApiController extends Controller
 
             foreach ($res_hashtags as $value) {
                 $hash_tags_count = Review::where('hashtags', 'LIKE', '%'.$value.'%')->count(); 
-                if($hash_tags_count > 1){
+                if($hash_tags_count > 1 && $value != '' ){
                 $review_hashtags_counts[$value] = $hash_tags_count;
                 }
               }
