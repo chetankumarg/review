@@ -1597,7 +1597,7 @@ class ApiController extends Controller
     public function get_trending_post(Request $request){
 
        // $group_hashtags = DB::raw('group_concat(reviews.hashtags)');
-
+        $user_id = $request->user_id;
         $group_hashtags = Review::select( DB::raw('CONCAT(hashtags) AS hashtags'))
            ->get();
        //    ->toArray();
@@ -1661,6 +1661,11 @@ class ApiController extends Controller
                             $postdata["shorturl"] = $data->shorturl;
                             $postdata["lat"] = $data->lat;
                             $postdata["long"] = $data->long;
+                            $postdata["likes_count"] = Likes::where('post_id', $data->id)->count();
+                            $postdata["views_count"] = Views::where('post_id', $data->id)->count();
+                            if($user_id > 0 ){
+                                $postdata["user_like_status"] = Likes::where('post_id', $data->id)->where('user_id',$user_id)->count();  
+                            }
                             $postdata["usr_lat"] = $data->usr_lat;
                             $postdata["usr_long"] = $data->usr_long;
                             $postdata["created_at"] = $data->created_at;  
