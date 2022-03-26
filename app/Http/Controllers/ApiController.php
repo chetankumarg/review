@@ -1656,7 +1656,7 @@ class ApiController extends Controller
                             $postdata["hashtags"] = $data->hashtags;
                             $postdata["mobile_user_id"] = $data->mobile_user_id;
                             $postdata["description"] = $data->description;
-                            $postdata["image"] = env('APP_URL')."/". str_replace("/var/www/html/review/public/","",$data->image);
+                            $postdata["image"] = $data->image;
                             $postdata["rating"] = $data->rating;
                             $postdata["shorturl"] = $data->shorturl;
                             $postdata["lat"] = $data->lat;
