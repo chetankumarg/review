@@ -954,7 +954,7 @@ class ApiController extends Controller
 
     public function getpost_review_by_shortcode(Request $request){
         if(!empty($request->shorturl)){
-        $post_id = $request->shorturl;
+            $post_id = $request->shorturl;
         }else{
             $post_id = $request->id;   
         }
@@ -966,7 +966,7 @@ class ApiController extends Controller
         }
         if($get_reviewcount > 0){
             if(!empty($request->shorturl)){
-        $post_review = Review::where('shorturl', $post_id)->get();
+                $post_review = Review::where('shorturl', $post_id)->get();
             }else{
                 $post_review = Review::where('id', $post_id)->get();  
             }
@@ -991,7 +991,8 @@ class ApiController extends Controller
                                     
             return response()->json([
                     "status" => true,
-                    "userdetails" => $postcontianer
+                    "userdetails" => $postcontianer,
+                    "user_input" => $post_id
             ], 200); 
         }else{
             return response()->json([
