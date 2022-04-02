@@ -959,9 +959,17 @@ class ApiController extends Controller
             $post_id = $request->id;   
         }
         $postdata = array();
-        $get_reviewcount = Review::where('shorturl',$post_id)->count();
+        if(!empty($request->shorturl)){
+            $get_reviewcount = Review::where('shorturl',$post_id)->count();
+        }else{
+            $get_reviewcount = Review::where('id',$post_id)->count(); 
+        }
         if($get_reviewcount > 0){
+            if(!empty($request->shorturl)){
         $post_review = Review::where('shorturl', $post_id)->get();
+            }else{
+                $post_review = Review::where('id', $post_id)->get();  
+            }
 
             foreach($post_review as $data)
                                         {                                      
