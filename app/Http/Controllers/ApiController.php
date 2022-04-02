@@ -991,8 +991,7 @@ class ApiController extends Controller
                                     
             return response()->json([
                     "status" => true,
-                    "userdetails" => $postcontianer,
-                    "user_input" => $post_id
+                    "postdetails" => $postcontianer
             ], 200); 
         }else{
             return response()->json([
