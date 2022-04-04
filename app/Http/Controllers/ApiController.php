@@ -972,11 +972,20 @@ class ApiController extends Controller
             }
 
             foreach($post_review as $data)
-                                        {                                      
+                                        { 
+                                                
+                                            $mobile_user = DB::table('mobile_users')
+                                            ->select('id', 'full_name', 'user_name', 'email','profile_picture')
+                                            ->where('id','=', $data->mobile_user_id)
+                                            ->first();
                                         $postdata["id"] = $data->id;
                                         $postdata["name"] = $data->name;  // $petani is a Std Class Object here
                                         $postdata["hashtags"] = $data->hashtags;
                                         $postdata["mobile_user_id"] = $data->mobile_user_id;
+                                        $postdata["mobile_full_name"] = $mobile_user->full_name;
+                                        $postdata["mobile_user_name"] = $mobile_user->user_name;
+                                        $postdata["mobile_email"] = $mobile_user->email;
+                                        $postdata["mobile_profile_picture"] = $mobile_user->profile_picture;
                                         $postdata["description"] = $data->description;
                                         $postdata["image"] = $data->image;
                                         $postdata["rating"] = $data->rating;
@@ -986,6 +995,8 @@ class ApiController extends Controller
                                         $postdata["usr_lat"] = $data->usr_lat;
                                         $postdata["usr_long"] = $data->usr_long;
                                         $postdata["created_at"] = $data->created_at;
+                                        $postdata["likes_count"] = Likes::where('post_id', $data->id)->count();
+                                        $postdata["views_count"] = Views::where('post_id', $data->id)->count();
                                         $postcontianer[] = $postdata;
                                         }
                                     
