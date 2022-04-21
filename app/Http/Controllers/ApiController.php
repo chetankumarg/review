@@ -445,6 +445,7 @@ class ApiController extends Controller
         $mobileReview->long = $request->long;
         $mobileReview->usr_lat = $request->usr_lat;
         $mobileReview->usr_long = $request->usr_long;
+        $mobileReview->other_hashtags = $request->other_hashtags;
         $mobileReview->rating = $request->rating;
         $mobileReview->categorie_id = $request->categorie_id;
         $mobileReview->shorturl = $short_url;
