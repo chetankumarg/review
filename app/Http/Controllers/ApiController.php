@@ -1746,7 +1746,7 @@ class ApiController extends Controller
                     $other_hash_tags_count = Review::where('other_hashtags', 'LIKE', '%'.$value.'%')->count(); 
                     $comment_hash_count = Comment::where('content', 'LIKE', '%'.$value.'%')->count(); 
                     $total_hash_count = $hash_tags_count + $other_hash_tags_count + $comment_hash_count;
-                    if($hash_tags_count > 0 && $value != '' ){
+                    if($total_hash_count > 2 && $value != '' ){
                     $review_hashtags_counts[$value] = $hash_tags_count;
                     $review_other_hashtag_counts[$value] = $other_hash_tags_count;
                     $review_comment_hashtag_counts[$value] = $comment_hash_count;
