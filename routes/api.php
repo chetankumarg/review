@@ -94,3 +94,6 @@ Route::post('mobileUser/user_details_by_id','App\Http\Controllers\ApiController@
 Route::post('mobileUser/get_post_hashtags','App\Http\Controllers\ApiController@get_post_hashtags');
 // Api to get the post hashtags for the review post
 Route::post('mobileUser/get_trending','App\Http\Controllers\ApiController@get_trending_post');
+
+// Api to get the post hashtags for the review post
+Route::post('mobileUser/get_trending_list','App\Http\Controllers\ApiController@get_trending_post_new');

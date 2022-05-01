@@ -5,6 +5,7 @@ use App\Models\MobileUsers;
 use App\Models\followers;
 use App\Models\Review;
 use App\Models\categories;
+use App\Models\Comment;
 use App\Models\Likes;
 use App\Models\Views;
 use App\Models\MobileAuthentication;
@@ -16,6 +17,7 @@ use DB;
 use Illuminate\Support\Facades\Storage;
 use App\Http\Helpers\AppHelper;
 use Image;
+use Carbon\Carbon;
 
 class ApiController extends Controller
 {
@@ -1714,5 +1716,118 @@ class ApiController extends Controller
                 "message" => "No Trending Hashtags is available"
             ], 200);
         }
+    }
+
+
+    public function get_trending_post_new(Request $request){
+        // $group_hashtags = DB::raw('group_concat(reviews.hashtags)');
+        $user_id = $request->user_id;
+        $date = Carbon::now()->subDays(300);
+        $group_hashtags = Review::select( DB::raw('CONCAT(hashtags) AS hashtags'))
+           ->where('created_at', '>=', $date)
+           ->get();
+       //    ->toArray();
+       $hashtags_count = count($group_hashtags);
+       if($hashtags_count > 0){
+        foreach($group_hashtags as $data){
+                $hashtags[] = $data->hashtags;
+
+            }
+
+
+            $hashtagsList = implode(',', $hashtags);
+            $res_hashtags = explode(',', $hashtagsList);
+            $res_hashtags = array_unique($res_hashtags);
+
+            if( (array_count_values($res_hashtags)) > 0 ){
+
+                foreach ($res_hashtags as $value) {
+                    $hash_tags_count = Review::where('hashtags', 'LIKE', '%'.$value.'%')->count(); 
+                    $other_hash_tags_count = Review::where('other_hashtags', 'LIKE', '%'.$value.'%')->count(); 
+                    $comment_hash_count = Comment::where('content', 'LIKE', '%'.$value.'%')->count(); 
+                    $total_hash_count = $hash_tags_count + $other_hash_tags_count + $comment_hash_count;
+                    if($hash_tags_count > 0 && $value != '' ){
+                    $review_hashtags_counts[$value] = $hash_tags_count;
+                    $review_other_hashtag_counts[$value] = $other_hash_tags_count;
+                    $review_comment_hashtag_counts[$value] = $comment_hash_count;
+                    $review_total_hashtag_counts[$value] = $total_hash_count;
+                    }
+                  }
+                
+                  if(empty($review_total_hashtag_counts)){
+                    return response()->json([
+                        "status" => false,
+                        "message" => "No Tredening with not more than 1 hashtags"
+                    ], 200);
+             }
+
+              $rev_arr_res = arsort($review_total_hashtag_counts);  
+
+            foreach($review_total_hashtag_counts as $key => $value){
+                if($value > 2){
+                    $post_review =  DB::table("reviews as rw")
+                    ->where('rw.hashtags', 'LIKE', '%'.$key.'%')
+                    ->select(array('rw.*'))->get();
+
+                    foreach($post_review as $data)
+                    {                                      
+                        $postcontianer_ids[] = $data->id;
+                    }  
+                }          
+             }
+    
+               $post_review =  DB::table("reviews as rw")                   
+                   ->whereIn('rw.id', $postcontianer_ids)
+                   ->select(array('rw.*'))
+                   ->where('created_at', '>=', $date)
+                   ->orderBy('created_at','desc')
+                   ->get();
+
+                   foreach($post_review as $data)
+                   {                                      
+                           $postdata["id"] = $data->id;
+                           $postdata["name"] = $data->name;  // $petani is a Std Class Object here
+                           $postdata["hashtags"] = $data->hashtags;
+                           $postdata["other_hashtags"] = $data->other_hashtags;
+                           $postdata["mobile_user_id"] = $data->mobile_user_id;
+                           $postdata["description"] = $data->description;
+                           $postdata["image"] = $data->image;
+                           $postdata["rating"] = $data->rating;
+                           $postdata["shorturl"] = $data->shorturl;
+                           $postdata["lat"] = $data->lat;
+                           $postdata["long"] = $data->long;
+                           $postdata["likes_count"] = Likes::where('post_id', $data->id)->count();
+                           $postdata["views_count"] = Views::where('post_id', $data->id)->count();
+                           if($user_id > 0 ){
+                               $postdata["user_like_status"] = Likes::where('post_id', $data->id)->where('user_id',$user_id)->count();  
+                           }
+                           $postdata["usr_lat"] = $data->usr_lat;
+                           $postdata["usr_long"] = $data->usr_long;
+                           $postdata["created_at"] = $data->created_at;  
+                           $postcontianer[] = $postdata;
+                   }  
+                    
+
+           return response()->json([
+               "status" => true,
+               // "post_details" => $postcontianer,
+              // "result_hashtags_count" => $review_hashtags_counts,
+               "result_total_hashtags_count" => $review_total_hashtag_counts,
+               "result_post_detials" => $postcontianer
+              // "result_post_ids" => $postcontianer_ids
+               ], 200); 
+
+            } else{
+                return response()->json([
+                    "status" => true,
+                    "message" => "No Trending Hashtags is available"
+                ], 200);
+            }
+        } else{
+            return response()->json([
+                "status" => true,
+                "message" => "No Trending Hashtags is available"
+            ], 200); 
+        }         
     }
 }
