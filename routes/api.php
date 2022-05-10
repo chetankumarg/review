@@ -79,6 +79,9 @@ Route::post('mobileUser/check_user_likepost', 'App\Http\Controllers\ApiControlle
 
 // api to follow the users.
 Route::post('mobileUser/follow_user', 'App\Http\Controllers\ApiController@follow_user');
+
+// api to follow list of the users.
+Route::post('mobileUser/myfollower_list_user', 'App\Http\Controllers\ApiController@myfollower_list_user');
 // api to unfollow the users.
 Route::post('mobileUser/unfollow_user', 'App\Http\Controllers\ApiController@unfollow_user');
 
