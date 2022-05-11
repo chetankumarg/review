@@ -1337,6 +1337,9 @@ class ApiController extends Controller
 
         $followers_id = followers::where('user_id',$user_id)->get();
 
+        $followers_count = $followers_id->count();
+
+        if($followers_count > 0 ){
         $followers_ids = array();
             
         foreach($followers_id as $data){
@@ -1365,7 +1368,13 @@ class ApiController extends Controller
         return response()->json([
             "status" => true,
             "post_details" => $followers_list
-            ], 200);              
+            ], 200); 
+        }else{
+            return response()->json([
+                "status" => false,
+                "message" => "No Followers is found"
+                ], 200);
+        }                 
     }
 
         // function to get the list of followers by the user-id
@@ -1374,7 +1383,10 @@ class ApiController extends Controller
             $follower_id = $request->followers_id;
     
             $followers_id = followers::where('user_id',$follower_id)->get();
-    
+            
+            $followers_count = $followers_id->count();
+
+            if($followers_count > 0 ){
             $followers_ids = array();
                 
             foreach($followers_id as $data){
@@ -1403,7 +1415,13 @@ class ApiController extends Controller
             return response()->json([
                 "status" => true,
                 "post_details" => $followers_list
-                ], 200);              
+                ], 200);     
+            }else{
+                return response()->json([
+                    "status" => false,
+                    "message" => "No Followers is found"
+                    ], 200);
+            }             
         }
 
     // function to create the review (post) by the mobile user api...
