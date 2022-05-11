@@ -1365,36 +1365,46 @@ class ApiController extends Controller
         return response()->json([
             "status" => true,
             "post_details" => $followers_list
-            ], 200);
-        
-
-        // $followers = DB::table('mobile_users')
-        //                 ->join('followers' , 'followers.user_id' , '=','mobile_users.id') -> 
-        //                  select ('mobile_users.id', 'mobile_users.full_name', 'mobile_users.user_name', 
-        //                 'mobile_users.email', 'mobile_users.phone_no', 'mobile_users.profile_picture','followers.user_id') 
-        //                 ->whereIn('followers.user_id' , $followers_ids)->get();
-
-                       
-
-        //                 foreach($followers as $data)
-        //                 {                                      
-        //                         $postdata["mobile_user_id"] = $data->id;
-        //                         // $petani is a Std Class Object here
-        //                         $postdata["full_name"] = $data->full_name;
-        //                        // $postdata["mobile_user_id"] = $data->mobile_user_id;
-        //                         $postdata["email"] = $data->email;
-        //                         $postdata["profile_picture"] = str_replace("/var/www/html/review/public/","http://139.59.76.151/",$data->profile_picture);
-        //                         $postdata["phone_no"] = $data->phone_no;
-        //                         $postdata["following_status"] = followers::where('user_id',$data->id)->where('follower_id',$user_id)->count();
-                               
-        //                         $followers_list[] = $postdata;
-        //                 }
-                
-        //                 return response()->json([
-        //                 "status" => true,
-        //                 "post_details" => $followers_list
-        //                 ], 200);                
+            ], 200);              
     }
+
+        // function to get the list of followers by the user-id
+        public function otherfollower_list_user(Request $request){
+            $user_id = $request->login_user_id;
+            $follower_id = $request->followers_id;
+    
+            $followers_id = followers::where('user_id',$follower_id)->get();
+    
+            $followers_ids = array();
+                
+            foreach($followers_id as $data){
+                $followers_ids[] = $data->follower_id;
+    
+                $followers = DB::table('mobile_users')
+                ->select ('mobile_users.id', 'mobile_users.full_name', 'mobile_users.user_name', 
+                'mobile_users.email', 'mobile_users.phone_no', 'mobile_users.profile_picture') 
+                ->where('mobile_users.id' , $data->follower_id)->get();
+    
+                foreach($followers as $data)
+                {                                      
+                        $postdata["mobile_user_id"] = $data->id;
+                        // $petani is a Std Class Object here
+                        $postdata["full_name"] = $data->full_name;
+                       // $postdata["mobile_user_id"] = $data->mobile_user_id;
+                        $postdata["email"] = $data->email;
+                        $postdata["profile_picture"] = str_replace("/var/www/html/review/public/","http://139.59.76.151/",$data->profile_picture);
+                        $postdata["phone_no"] = $data->phone_no;
+                        $postdata["following_status"] = followers::where('user_id', $user_id)->where('follower_id',$data->id)->count();
+                       
+                        $followers_list[] = $postdata;
+                }
+        
+            }
+            return response()->json([
+                "status" => true,
+                "post_details" => $followers_list
+                ], 200);              
+        }
 
     // function to create the review (post) by the mobile user api...
     public function unfollow_user(Request $request){
