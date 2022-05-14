@@ -82,9 +82,11 @@ Route::post('mobileUser/follow_user', 'App\Http\Controllers\ApiController@follow
 
 // api to follow list of the users.
 Route::post('mobileUser/myfollower_list_user', 'App\Http\Controllers\ApiController@myfollower_list_user');
+Route::post('mobileUser/myfollowing_list_user', 'App\Http\Controllers\ApiController@myfollowing_list_user');
 
 // api of other follower list of the users.
 Route::post('mobileUser/otherfollower_list_user', 'App\Http\Controllers\ApiController@otherfollower_list_user');
+Route::post('mobileUser/otherfollowing_list_user', 'App\Http\Controllers\ApiController@otherfollowing_list_user');
 
 // api to unfollow the users.
 Route::post('mobileUser/unfollow_user', 'App\Http\Controllers\ApiController@unfollow_user');

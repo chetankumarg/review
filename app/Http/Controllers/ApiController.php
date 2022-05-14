@@ -1378,6 +1378,53 @@ class ApiController extends Controller
         }                 
     }
 
+     // function to get the list of followers by the user-id
+     public function myfollowing_list_user(Request $request){
+        $user_id = $request->login_user_id;
+
+        $followers_id = followers::where('follower_id',$user_id)->get();
+
+        $followers_count = $followers_id->count();
+
+        if($followers_count > 0 ){
+        $followers_ids = array();
+            
+        foreach($followers_id as $data){
+            $followers_ids[] = $data->follower_id;
+
+            $followers = DB::table('mobile_users')
+            ->select ('mobile_users.id', 'mobile_users.full_name', 'mobile_users.user_name', 
+            'mobile_users.email', 'mobile_users.phone_no', 'mobile_users.profile_picture') 
+            ->where('mobile_users.id' , $data->follower_id)->get();
+
+            foreach($followers as $data)
+            {                                      
+                    $postdata["mobile_user_id"] = $data->id;
+                    // $petani is a Std Class Object here
+                    $postdata["full_name"] = $data->full_name;
+                    $postdata["user_name"] = $data->user_name;
+                   // $postdata["mobile_user_id"] = $data->mobile_user_id;
+                    $postdata["email"] = $data->email;
+                    $postdata["profile_picture"] = str_replace("/var/www/html/review/public/","http://139.59.76.151/",$data->profile_picture);
+                    $postdata["phone_no"] = $data->phone_no;
+                    $postdata["following_status"] = followers::where('user_id',$data->id)->where('user_id',$user_id)->count();
+                   
+                    $followers_list[] = $postdata;
+            }
+    
+        }
+        return response()->json([
+            "status" => true,
+            "post_details" => $followers_list
+            ], 200); 
+        }else{
+            return response()->json([
+                "status" => false,
+                "message" => "No Followers is found"
+                ], 200);
+        }                 
+    }   
+
         // function to get the list of followers by the user-id
         public function otherfollower_list_user(Request $request){
             $user_id = $request->login_user_id;
@@ -1426,6 +1473,55 @@ class ApiController extends Controller
             }             
         }
 
+
+         // function to get the list of followers by the user-id
+         public function otherfollowing_list_user(Request $request){
+            $user_id = $request->login_user_id;
+            $follower_id = $request->followers_id;
+    
+            $followers_id = followers::where('follower_id',$follower_id)->get();
+            
+            $followers_count = $followers_id->count();
+
+            if($followers_count > 0 ){
+            $followers_ids = array();
+                
+            foreach($followers_id as $data){
+                $followers_ids[] = $data->follower_id;
+    
+                $followers = DB::table('mobile_users')
+                ->select ('mobile_users.id', 'mobile_users.full_name', 'mobile_users.user_name', 
+                'mobile_users.email', 'mobile_users.phone_no', 'mobile_users.profile_picture') 
+                ->where('mobile_users.id' , $data->follower_id)->get();
+    
+                foreach($followers as $data)
+                {                                      
+                        $postdata["mobile_user_id"] = $data->id;
+                        // $petani is a Std Class Object here
+                        $postdata["full_name"] = $data->full_name;
+                        $postdata["user_name"] = $data->user_name;
+                       // $postdata["mobile_user_id"] = $data->mobile_user_id;
+                        $postdata["email"] = $data->email;
+                        $postdata["profile_picture"] = str_replace("/var/www/html/review/public/","http://139.59.76.151/",$data->profile_picture);
+                        $postdata["phone_no"] = $data->phone_no;
+                        $postdata["following_status"] = followers::where('user_id', $user_id)->where('follower_id',$data->id)->count();
+                       
+                        $followers_list[] = $postdata;
+                }
+        
+            }
+            return response()->json([
+                "status" => true,
+                "post_details" => $followers_list
+                ], 200);     
+            }else{
+                return response()->json([
+                    "status" => false,
+                    "message" => "No Followers is found"
+                    ], 200);
+            }             
+        }
+        
     // function to create the review (post) by the mobile user api...
     public function unfollow_user(Request $request){
 
