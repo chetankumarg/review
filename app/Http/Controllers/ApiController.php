@@ -1835,10 +1835,29 @@ class ApiController extends Controller
             if( (array_count_values($res_hashtags)) > 0 ){
 
                 foreach ($res_hashtags as $value) {
-                    $hash_tags_count = Review::where('hashtags', 'LIKE', '%'.$value.'%')->count(); 
-                    $other_hash_tags_count = Review::where('other_hashtags', 'LIKE', '%'.$value.'%')->count(); 
-                    $comment_hash_count = Comment::where('content', 'LIKE', '%'.$value.'%')->count(); 
-                    $total_hash_count = $hash_tags_count + $other_hash_tags_count + $comment_hash_count;
+                    $hash_tags_count = Review::where('hashtags', 'LIKE', '%'.$value.'%')->where('created_at', '>=', $date)->count(); 
+                    $other_hash_tags_count = Review::where('other_hashtags', 'LIKE', '%'.$value.'%')->where('created_at', '>=', $date)->count(); 
+                    $comment_hash_count = Comment::where('content', 'LIKE', '%'.$value.'%')->where('created_at', '>=', $date)->count(); 
+                    
+                    // query to get the likes count values
+                    $likes_count = DB::table('likes')
+                    ->join('reviews', 'likes.post_id', '=', 'reviews.id')
+                    ->select(DB::raw("count(likes.id)"))
+                    ->where('reviews.hashtags', 'LIKE', '%'. $value .'%')
+                    ->where('reviews.created_at', '>=', $date)->count(); 
+                    
+                    // query to get the views count values
+                    $views_count = DB::table('views')
+                    ->join('reviews', 'views.post_id', '=', 'reviews.id')
+                    ->select(DB::raw("count(views.id)"))
+                    ->where('reviews.hashtags', 'LIKE', '%'. $value .'%')
+                    ->where('reviews.created_at', '>=', $date)->count(); 
+                
+                    
+                    $total_hash_count = $hash_tags_count + $other_hash_tags_count + $comment_hash_count + $likes_count + $views_count;
+                   // $total_hash_count = $likes_count;
+                   
+                   
                     if($total_hash_count > 2 && $value != '' ){
                     $review_hashtags_counts[$value] = $hash_tags_count;
                     $review_other_hashtag_counts[$value] = $other_hash_tags_count;
@@ -1906,8 +1925,9 @@ class ApiController extends Controller
                // "post_details" => $postcontianer,
               // "result_hashtags_count" => $review_hashtags_counts,
                "result_total_hashtags_count" => $review_total_hashtag_counts,
-               "result_post_detials" => $postcontianer
-              // "result_post_ids" => $postcontianer_ids
+              //  "result_post_detials" => $postcontianer
+              // "result_post_ids" => $postcontianer_ids,
+              // "result_total_hashtags_count_include_likes" => $total_hash_count_include_likes
                ], 200); 
 
             } else{
