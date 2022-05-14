@@ -1463,7 +1463,7 @@ class ApiController extends Controller
             }
             return response()->json([
                 "status" => true,
-                "follower_id" => $followers_ids,
+             //   "follower_id" => $followers_ids,
                 "post_details" => $followers_list
                 ], 200);     
             }else{
