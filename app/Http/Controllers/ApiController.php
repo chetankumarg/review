@@ -1402,6 +1402,7 @@ class ApiController extends Controller
                         $postdata["mobile_user_id"] = $data->id;
                         // $petani is a Std Class Object here
                         $postdata["full_name"] = $data->full_name;
+                        $postdata["user_name"] = $data->user_name;
                        // $postdata["mobile_user_id"] = $data->mobile_user_id;
                         $postdata["email"] = $data->email;
                         $postdata["profile_picture"] = str_replace("/var/www/html/review/public/","http://139.59.76.151/",$data->profile_picture);
