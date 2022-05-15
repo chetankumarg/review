@@ -1747,8 +1747,8 @@ class ApiController extends Controller
 
         $reviews_count = Review::where('mobile_user_id', $userid)->count();
 
-        $followers_count = followers::join('mobile_users', 'mobile_users.id', '=', 'followers.user_id')->where('user_id', $userid)->count();
-        $followering_count = followers::join('mobile_users', 'mobile_users.id', '=', 'followers.follower_id')->where('follower_id', $userid)->count();
+        $followers_count = followers::join('mobile_users', 'mobile_users.id', '=', 'followers.follower_id')->where('user_id', $userid)->count();
+        $followering_count = followers::join('mobile_users', 'mobile_users.id', '=', 'followers.user_id')->where('follower_id', $userid)->count();
 
         foreach($mobileUsers as $data)
                                     {                                      
