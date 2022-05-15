@@ -1551,7 +1551,7 @@ class ApiController extends Controller
             }else{
                 return response()->json([
                     "status" => false,
-                    "message" => "You are not already unfollowing."
+                    "message" => "You are already unfollowing."
                 ], 200);
             }    
     }
