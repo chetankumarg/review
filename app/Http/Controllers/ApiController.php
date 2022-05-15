@@ -1390,8 +1390,8 @@ class ApiController extends Controller
         $followers_count = $followers_id->count();
 
         if($followers_count > 0 ){
-        $followers_ids = array();
-        $followers_ids = array_unique($followers_ids);
+        $foll_ids = array();
+        $followers_ids = array_unique($foll_ids);
             
         foreach($followers_id as $data){
             $followers_ids[] = $data->user_id;
