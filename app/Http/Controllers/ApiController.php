@@ -990,7 +990,7 @@ class ApiController extends Controller
                                             $postdata["mobile_full_name"] = $mobile_user->full_name;
                                             $postdata["mobile_user_name"] = $mobile_user->user_name;
                                             $postdata["mobile_email"] = $mobile_user->email;
-                                            $postdata["mobile_profile_picture"] = (empty($mobile_user->profile_picture)) ? env('APP_URL')."/". str_replace("/var/www/html/review/public/","",$mobile_user->profile_picture) : "" ;
+                                            $postdata["mobile_profile_picture"] = ($mobile_user->profile_picture == "") ? env('APP_URL')."/". str_replace("/var/www/html/review/public/","",$mobile_user->profile_picture) : "" ;
                                             $postdata["description"] = $data->description;
                                             $postdata["image"] = $data->image;
                                             $postdata["rating"] = $data->rating;
