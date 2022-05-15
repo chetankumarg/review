@@ -1326,10 +1326,10 @@ class ApiController extends Controller
                     "message" => "You are not successfully following."
                 ], 200);
             }
-        }else{
+        }elseif($followers_count == 1 || $followers_count > 0 ){
             return response()->json([
                 "status" => false,
-                "message" => "You are not already following."
+                "message" => "You are already following."
             ], 200);
         }    
     }
