@@ -1335,7 +1335,7 @@ class ApiController extends Controller
     public function myfollower_list_user(Request $request){
         $user_id = $request->login_user_id;
 
-        $followers_id = followers::where('user_id',$user_id)->get();
+        $followers_id = followers::join('mobile_users', 'mobile_users.id', '=', 'followers.follower_id')->where('user_id',$user_id)->get();
 
         $followers_count = $followers_id->count();
 
@@ -1382,7 +1382,7 @@ class ApiController extends Controller
      public function myfollowing_list_user(Request $request){
         $user_id = $request->login_user_id;
 
-        $followers_id = followers::where('follower_id',$user_id)->get();
+        $followers_id = followers::join('mobile_users', 'mobile_users.id', '=', 'followers.user_id')->where('follower_id',$user_id)->get();
 
         $followers_count = $followers_id->count();
 
