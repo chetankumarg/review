@@ -1305,9 +1305,9 @@ class ApiController extends Controller
      public function follow_user(Request $request){
 
         $follower_id  = $request->user_id;
-        $user_id= $request->current_user_id; // current user id ..
+        $user_id = $request->current_user_id; // current user id ..
 
-        $followers_count = followers::where('user_id',$user_id)->where('follower_id',$follower_id)->count();
+        $followers_count = followers::where('user_id',$follower_id)->where('follower_id',$user_id)->count();
         
         if($followers_count == 0){
             $followers = new followers;
