@@ -1390,7 +1390,7 @@ class ApiController extends Controller
         $followers_ids = array();
             
         foreach($followers_id as $data){
-            $followers_ids[] = $data->follower_id;
+            $followers_ids[] = $data->user_id;
 
             $followers = DB::table('mobile_users')
             ->select ('mobile_users.id', 'mobile_users.full_name', 'mobile_users.user_name', 
