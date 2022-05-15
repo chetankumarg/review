@@ -1304,8 +1304,8 @@ class ApiController extends Controller
      // function to create the review (post) by the mobile user api...
      public function follow_user(Request $request){
 
-        $user_id = $request->user_id;
-        $follower_id = $request->current_user_id; // current user id ..
+        $follower_id  = $request->user_id;
+        $user_id= $request->current_user_id; // current user id ..
 
         $followers_count = followers::where('user_id',$user_id)->where('follower_id',$follower_id)->count();
         
