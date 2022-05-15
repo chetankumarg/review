@@ -1447,7 +1447,9 @@ class ApiController extends Controller
                 $followers = DB::table('mobile_users')
                 ->select ('mobile_users.id', 'mobile_users.full_name', 'mobile_users.user_name', 
                 'mobile_users.email', 'mobile_users.phone_no', 'mobile_users.profile_picture') 
-                ->where('mobile_users.id' , $data->follower_id)->get();
+                ->where('mobile_users.id' , $data->follower_id)
+                ->where('mobile_users.id', '!=' , $follower_id)
+                ->get();
     
                 foreach($followers as $data)
                 {                                      
