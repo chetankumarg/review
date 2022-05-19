@@ -956,7 +956,8 @@ class ApiController extends Controller
  }
 
     public function getpost_review_by_shortcode(Request $request){
-        $user_id_mobile = $request->mobile_user_id;
+        $user_id_mobile = $request->login_user_id;
+   // $login_user_id = $request->login_user_id;
         if(!empty($request->shorturl)){
             $post_id = $request->shorturl;
         }else{
@@ -1007,6 +1008,7 @@ class ApiController extends Controller
                                             $postdata["views_count"] = Views::where('post_id', $data->id)->count();
                                                 if(!empty($user_id_mobile)){
                                                     $postdata["User_like_post"] = Likes::where('post_id', $data->id)->where('user_id',$user_id_mobile)->count();
+                                                    $postdata["User_follow_post"] =  followers::where('user_id',$data->mobile_user_id)->where('follower_id',$user_id_mobile)->count();
                                                 }
                                             $postcontianer[] = $postdata;
                                         }
