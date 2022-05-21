@@ -630,6 +630,279 @@ paths:
         '400':
           description: Bad request        
 
+  /getpostreview_by_id:
+    post:
+      tags:
+        - getpostreview_by_id
+      summary: mobileUser getpostreview_by_id 
+      description: 'mobileUser getpostreview_by_id by hashtags shorturl'
+      operationId: mobileUser getpostreview_by_id
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - in: "body"
+          name: "body"
+          description: "get post details by id or shortcode url"
+          schema:
+            type: object
+            properties:
+              login_user_id:
+                type: string 
+              shorturl:
+                type: string
+              id: 
+                type: string     
+      responses:
+        '200':
+          description: successful operation
+        '400':
+          description: Bad request   
+
+  /getpostreview:
+    post:
+      tags:
+        - getpostreview
+      summary: mobileUser getpostreview 
+      description: 'mobileUser getpostreview by hashtags shorturl'
+      operationId: mobileUser getpostreview
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - in: "body"
+          name: "body"
+          description: "get post details by the particular user id (uid)"
+          schema:
+            type: object
+            properties:
+              uid:
+                type: string 
+   
+      responses:
+        '200':
+          description: successful operation
+        '400':
+          description: Bad request  
+ 
+  /getcategories_list:
+    get:
+      tags:
+        - getcategories_list
+      summary: getcategories_list
+      description: 'getcategories_list'
+      operationId: getcategories_list
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      responses:
+        '200':
+          description: successful operation
+        '400':
+          description: Bad request    
+
+  /mobileUser/myfollower_list_user:
+    post:
+      tags:
+        - myfollower_list_user
+      summary: mobileUser myfollower_list_user 
+      description: 'mobileUser myfollower_list_user'
+      operationId: mobileUser myfollower_list_user
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - in: "body"
+          name: "body"
+          description: "get myfollower list api"
+          schema:
+            type: object
+            properties:
+              login_user_id:
+                type: string 
+   
+      responses:
+        '200':
+          description: successful operation
+        '400':
+          description: Bad request            
+
+  /mobileUser/myfollowing_list_user:
+    post:
+      tags:
+        - myfollowing_list_user
+      summary: mobileUser myfollowing_list_user 
+      description: 'mobileUser myfollowing_list_user'
+      operationId: mobileUser myfollowing_list_user
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - in: "body"
+          name: "body"
+          description: "get myfollowing_list_user api"
+          schema:
+            type: object
+            properties:
+              login_user_id:
+                type: string 
+   
+      responses:
+        '200':
+          description: successful operation
+        '400':
+          description: Bad request   
+          
+  /mobileUser/otherfollower_list_user:
+    post:
+      tags:
+        - otherfollower_list_user
+      summary: mobileUser otherfollower_list_user 
+      description: 'mobileUser otherfollower_list_user'
+      operationId: mobileUser otherfollower_list_user
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - in: "body"
+          name: "body"
+          description: "get otherfollower_list_user api"
+          schema:
+            type: object
+            properties:
+              login_user_id:
+                type: string 
+              followers_id:
+                type: string  
+   
+      responses:
+        '200':
+          description: successful operation
+        '400':
+          description: Bad request   
+   
+  /mobileUser/otherfollowing_list_user:
+    post:
+      tags:
+        - otherfollowing_list_user
+      summary: mobileUser otherfollowing_list_user 
+      description: 'mobileUser otherfollowing_list_user'
+      operationId: mobileUser otherfollowing_list_user
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - in: "body"
+          name: "body"
+          description: "get otherfollowing_list_user api"
+          schema:
+            type: object
+            properties:
+              login_user_id:
+                type: string 
+              followers_id:
+                type: string    
+   
+      responses:
+        '200':
+          description: successful operation
+        '400':
+          description: Bad request            
+
+  /mobileUser/check_userdetials:
+    post:
+      tags:
+        - check_userdetials
+      summary: mobileUser check_userdetials 
+      description: 'mobileUser check_userdetials'
+      operationId: mobileUser check_userdetials
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - in: "body"
+          name: "body"
+          description: "get check_userdetials api"
+          schema:
+            type: object
+            properties:
+              user_name:
+                type: string 
+              user_mail:
+                type: string 
+              user_mobileno:
+                type: string     
+   
+      responses:
+        '200':
+          description: successful operation
+        '400':
+          description: Bad request     
+ 
+  /mobileUser/user_details_by_id:
+    post:
+      tags:
+        - user_details_by_id
+      summary: mobileUser user_details_by_id 
+      description: 'mobileUser user_details_by_id'
+      operationId: mobileUser user_details_by_id
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - in: "body"
+          name: "body"
+          description: "get user_details_by_id api"
+          schema:
+            type: object
+            properties:
+              user_id:
+                type: string    
+   
+      responses:
+        '200':
+          description: successful operation
+        '400':
+          description: Bad request   
+  
+  /mobileUser/create_viewCount:
+    post:
+      tags:
+        - create_viewCount
+      summary: mobileUser create_viewCount 
+      description: 'mobileUser create_viewCount'
+      operationId: mobileUser create_viewCount
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - in: "body"
+          name: "body"
+          description: "get create_viewCount api"
+          schema:
+            type: object
+            properties:
+              post_id:
+                type: string
+              user_id:
+                type: string    
+   
+      responses:
+        '200':
+          description: successful operation
+        '400':
+          description: Bad request    
+          
 securityDefinitions:
   api_key:
     type: apiKey
