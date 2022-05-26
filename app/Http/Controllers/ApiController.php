@@ -1463,8 +1463,10 @@ class ApiController extends Controller
                         $postdata["email"] = $data->email;
                         $postdata["profile_picture"] = str_replace("/var/www/html/review/public/","http://139.59.76.151/",$data->profile_picture);
                         $postdata["phone_no"] = $data->phone_no;
-                        $postdata["following_status"] = followers::where('user_id', $follower_id)->where('follower_id',$data->id)->count();
-                        $postdata["following_status_current"] = followers::where('user_id', $user_id)->where('follower_id',$data->id)->count();
+                        $postdata["following_status_current"] = followers::where('user_id', $follower_id)->where('follower_id',$data->id)->count();
+                        $postdata["other_following_status_current"] = followers::where('user_id', $user_id)->where('follower_id',$data->id)->count();
+                       // $postdata["following_status_current"] = followers::where('user_id',$data->id)->where('follower_id',$user_id)->count();
+                       // $postdata["other_following_status_current"] = followers::where('user_id', $data->id)->where('follower_id',$follower_id)->count();
                         $followers_list[] = $postdata;
                 }
         
