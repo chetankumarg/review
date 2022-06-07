@@ -74,6 +74,20 @@ Route::post('mobileUser/users_liked_post', 'App\Http\Controllers\ApiController@u
 // api check whether the current post is liked by the user or not.
 Route::post('mobileUser/check_user_likepost', 'App\Http\Controllers\ApiController@check_user_likepost');
 
+// api for liking/delete the comments.
+Route::post('mobileUser/create_del_the_comment', 'App\Http\Controllers\ApiController@create_del_the_comment');
+// api for liking/delete the comments.
+Route::post('mobileUser/create_del_the_subcomment', 'App\Http\Controllers\ApiController@create_del_the_subcomment');
+// API for the like the comments and aggree.
+// api for liking/delete the comments.
+Route::post('mobileUser/like_del_the_comment', 'App\Http\Controllers\ApiController@like_del_the_comment');
+// api for  like/delete the sub-comments
+Route::post('mobileUser/like_del_like_subcomment', 'App\Http\Controllers\ApiController@like_del_the_subcomment');
+
+// api for agree/disagree the comments.
+Route::post('mobileUser/agree_disagree_the_comment', 'App\Http\Controllers\ApiController@agree_disagree_the_comment');
+// api for  agree/disagree the sub-comments
+Route::post('mobileUser/agree_disagree_like_subcomment', 'App\Http\Controllers\ApiController@agree_disagree_the_subcomment');
 
 // api function for the follow/unfollow users list
 

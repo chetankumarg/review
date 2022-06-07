@@ -6,6 +6,10 @@ use App\Models\followers;
 use App\Models\Review;
 use App\Models\categories;
 use App\Models\Comment;
+use App\Models\comments_likes;
+use App\Models\subcomments_likes;
+use App\Models\agree_comments;
+use App\Models\agree_subcomments;
 use App\Models\Likes;
 use App\Models\Views;
 use App\Models\MobileAuthentication;
@@ -1185,7 +1189,340 @@ class ApiController extends Controller
 
     }
 
+    public function create_del_the_comment(Request $request){
+        $review_id = $request->review_id;
+        $user_id = $request->mobile_user_id;
+        $content = $request->content;
+        $comment_status = $request->comment_status;
+        $comment_id = $request->id;
 
+
+        if($comment_status == 1){
+
+                $Comment = new Comment;
+                $Comment->review_id = $request->review_id;
+                $Comment->mobile_user_id = $request->mobile_user_id;
+                $Comment->content = $request->content;
+                $Comment->save();
+
+                if($Comment){
+                    return response()->json([
+                        "status" => true,
+                        "message" => "You have Created the Comment"
+                    ], 200);
+                }else{
+                    return response()->json([
+                        "status" => false,
+                        "message" => "You have not Created the Comment"
+                    ], 200);
+                }
+        }elseif($comment_status == 0){
+
+            $Comment_del = Comment::where('id',$comment_id)->delete();
+                if($Comment_del){
+                    return response()->json([
+                        "status" => true,
+                        "message" => "Comment Like Deleted Successfully"
+                    ], 200);
+                }else{
+                    return response()->json([
+                        "status" => false,
+                        "message" => "Comment like Not Deleted Successfully."
+                    ], 200);
+                }
+        }      
+    }
+ 
+    public function create_del_the_subcomment(Request $request){
+        $review_id = $request->review_id;
+        $user_id = $request->mobile_user_id;
+        $content = $request->content;
+        $comment_id = $request->comment_id;
+        $comment_status = $request->comment_status;
+        $subcomment_id = $request->id;
+
+
+        if($comment_status == 1){
+
+                $Comment = new SubComment;
+                $Comment->comment_id = $request->comment_id;
+                $Comment->review_id = $request->review_id;
+                $Comment->mobile_user_id = $request->mobile_user_id;
+                $Comment->content = $request->content;
+                $Comment->save();
+
+                if($Comment){
+                    return response()->json([
+                        "status" => true,
+                        "message" => "You have Created the Sub-Comment"
+                    ], 200);
+                }else{
+                    return response()->json([
+                        "status" => false,
+                        "message" => "You have not Created the Sub-Comment"
+                    ], 200);
+                }
+        }elseif($comment_status == 0){
+
+            $Comment_del = SubComment::where('id',$subcomment_id)->delete();
+                if($Comment_del){
+                    return response()->json([
+                        "status" => true,
+                        "message" => "Sub-Comment Like Deleted Successfully"
+                    ], 200);
+                }else{
+                    return response()->json([
+                        "status" => false,
+                        "message" => "Sub-Comment like Not Deleted Successfully."
+                    ], 200);
+                }
+        }      
+    }
+    
+    //function to like / unlike the comments by the mobile user api..
+    public function like_del_the_comment(Request $request){
+
+        $comment_id = $request->comment_id;
+        $user_id = $request->mobile_user_id;
+        $like_status = $request->like_status;
+
+        $Comment_Like = comments_likes::where('comment_id',$comment_id)->where('mobile_user_id',$user_id)->get();
+        $Com_like_Count = $Comment_Like->count();
+    
+        if($like_status == 1){
+            
+            if($Com_like_Count == 0 ){
+                $likeComment = new comments_likes;
+                $likeComment->comment_id = $request->comment_id;
+                $likeComment->mobile_user_id = $request->mobile_user_id;
+                $likeComment->save();
+
+                if($likeComment){
+                    return response()->json([
+                        "status" => true,
+                        "message" => "You have liked this Comment"
+                    ], 200);
+                }else{
+                    return response()->json([
+                        "status" => false,
+                        "message" => "No like this Comment is created yet."
+                    ], 200);
+                }
+            }else{
+                return response()->json([
+                    "status" => false,
+                    "message" => "You Already Liked the Comments"
+                ], 200);
+            }
+
+        }elseif($like_status == 0){
+
+            if($Com_like_Count == 1 ){
+                $Comments_like = comments_likes::where('comment_id',$comment_id)->where('mobile_user_id',$user_id)->delete();
+                if($Comments_like){
+                    return response()->json([
+                        "status" => true,
+                        "message" => "Comment Like Deleted Successfully"
+                    ], 200);
+                }else{
+                    return response()->json([
+                        "status" => false,
+                        "message" => "Comment like Not Deleted Successfully."
+                    ], 200);
+                }
+            }elseif($Com_like_Count == 0 ){
+                return response()->json([
+                    "status" => false,
+                    "message" => "Comment Not Liked atAll."
+                ], 200);
+            }    
+
+        }
+    }
+
+     //function to like / unlike the Sub Comments by the mobile user api..
+     public function like_del_the_subcomment(Request $request){
+
+        $comment_id = $request->sub_comment_id;
+        $user_id = $request->mobile_user_id;
+        $like_status = $request->like_status;
+
+        $Comment_Like = subcomments_likes::where('subcomment_id',$comment_id)->where('mobile_user_id',$user_id)->get();
+        $Com_like_Count = $Comment_Like->count();
+    
+        if($like_status == 1){
+            
+            if($Com_like_Count == 0 ){
+                $likeComment = new subcomments_likes;
+                $likeComment->subcomment_id = $request->sub_comment_id;
+                $likeComment->mobile_user_id = $request->mobile_user_id;
+                $likeComment->save();
+
+                if($likeComment){
+                    return response()->json([
+                        "status" => true,
+                        "message" => "You have liked this Comment"
+                    ], 200);
+                }else{
+                    return response()->json([
+                        "status" => false,
+                        "message" => "No like this Comment is created yet."
+                    ], 200);
+                }
+            }else{
+                return response()->json([
+                    "status" => false,
+                    "message" => "You Already Liked the Comments"
+                ], 200);
+            }
+
+        }elseif($like_status == 0){
+
+            if($Com_like_Count == 1 ){
+                $Comments_like = subcomments_likes::where('subcomment_id',$comment_id)->where('mobile_user_id',$user_id)->delete();
+                if($Comments_like){
+                    return response()->json([
+                        "status" => true,
+                        "message" => "Comment Like Deleted Successfully"
+                    ], 200);
+                }else{
+                    return response()->json([
+                        "status" => false,
+                        "message" => "Comment like Not Deleted Successfully."
+                    ], 200);
+                }
+            }elseif($Com_like_Count == 0 ){
+                return response()->json([
+                    "status" => false,
+                    "message" => "Comment Not Liked atAll."
+                ], 200);
+            }    
+
+        }
+    }
+ 
+    //function to Agree / Disagree the  Comments by the mobile user api..
+    public function agree_disagree_the_comment(Request $request){
+
+            $comment_id = $request->comment_id;
+            $user_id = $request->mobile_user_id;
+            $like_status = $request->like_status;
+    
+            $Comment_Like = agree_comments::where('comment_id',$comment_id)->where('mobile_user_id',$user_id)->get();
+            $Com_like_Count = $Comment_Like->count();
+        
+            if($like_status == 1){
+                
+                if($Com_like_Count == 0 ){
+                    $likeComment = new agree_comments;
+                    $likeComment->comment_id = $request->comment_id;
+                    $likeComment->mobile_user_id = $request->mobile_user_id;
+                    $likeComment->save();
+    
+                    if($likeComment){
+                        return response()->json([
+                            "status" => true,
+                            "message" => "You have Agreed this Comment"
+                        ], 200);
+                    }else{
+                        return response()->json([
+                            "status" => false,
+                            "message" => "No Agreed this Comment is created yet."
+                        ], 200);
+                    }
+                }else{
+                    return response()->json([
+                        "status" => false,
+                        "message" => "You Already Agreed the Comments"
+                    ], 200);
+                }
+    
+            }elseif($like_status == 0){
+    
+                if($Com_like_Count == 1 ){
+                    $Comments_like = agree_comments::where('comment_id',$comment_id)->where('mobile_user_id',$user_id)->delete();
+                    if($Comments_like){
+                        return response()->json([
+                            "status" => true,
+                            "message" => "Comment Agreed Deleted Successfully"
+                        ], 200);
+                    }else{
+                        return response()->json([
+                            "status" => false,
+                            "message" => "Agreed like Not Deleted Successfully."
+                        ], 200);
+                    }
+                }elseif($Com_like_Count == 0 ){
+                    return response()->json([
+                        "status" => false,
+                        "message" => "Agreed Not Liked atAll."
+                    ], 200);
+                }    
+    
+            }
+    }
+
+     //function to agree_disagree_the_subcomment by the mobile user api..
+     public function agree_disagree_the_subcomment(Request $request){
+
+        $comment_id = $request->sub_comment_id;
+        $user_id = $request->mobile_user_id;
+        $like_status = $request->like_status;
+
+        $Comment_Like = agree_subcomments::where('subcomment_id',$comment_id)->where('mobile_user_id',$user_id)->get();
+        $Com_like_Count = $Comment_Like->count();
+    
+        if($like_status == 1){
+            
+            if($Com_like_Count == 0 ){
+                $likeComment = new agree_subcomments;
+                $likeComment->subcomment_id = $request->sub_comment_id;
+                $likeComment->mobile_user_id = $request->mobile_user_id;
+                $likeComment->save();
+
+                if($likeComment){
+                    return response()->json([
+                        "status" => true,
+                        "message" => "You have Agreed this SubComment"
+                    ], 200);
+                }else{
+                    return response()->json([
+                        "status" => false,
+                        "message" => "No Agreed this SubComment is created yet."
+                    ], 200);
+                }
+            }else{
+                return response()->json([
+                    "status" => false,
+                    "message" => "You Already Agreed the SubComment"
+                ], 200);
+            }
+
+        }elseif($like_status == 0){
+
+            if($Com_like_Count == 1 ){
+                $Comments_like = agree_subcomments::where('subcomment_id',$comment_id)->where('mobile_user_id',$user_id)->delete();
+                if($Comments_like){
+                    return response()->json([
+                        "status" => true,
+                        "message" => "SubComment Agreed Deleted Successfully"
+                    ], 200);
+                }else{
+                    return response()->json([
+                        "status" => false,
+                        "message" => "SubComment Agreed Not Deleted Successfully."
+                    ], 200);
+                }
+            }elseif($Com_like_Count == 0 ){
+                return response()->json([
+                    "status" => false,
+                    "message" => "SubComment Not Agreed atAll."
+                ], 200);
+            }    
+
+        }
+    }    
+    
      // function to create the review (post) by the mobile user api...
      public function like_the_post(Request $request){
 
