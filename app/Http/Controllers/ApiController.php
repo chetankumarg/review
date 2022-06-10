@@ -10,6 +10,7 @@ use App\Models\comments_likes;
 use App\Models\subcomments_likes;
 use App\Models\agree_comments;
 use App\Models\agree_subcomments;
+use App\Models\SubComment;
 use App\Models\Likes;
 use App\Models\Views;
 use App\Models\MobileAuthentication;
@@ -1188,6 +1189,12 @@ class ApiController extends Controller
         ], 201); 
 
     }
+
+    // public function view_the_post_comment(Request $request){
+    //     $post_id = $request->post_id;
+    //     $user_id = $request->mobile_user_id;
+
+    // }
 
     public function create_del_the_comment(Request $request){
         $review_id = $request->review_id;
