@@ -1216,6 +1216,7 @@ class ApiController extends Controller
                     $comdata["id"] = $data->id;
                     $comdata["review_id"] = $data->review_id;
                     $comdata["content"] = $data->content; 
+                    $comdata["created_at"] = $data->created_at; 
                     $comdata["mobile_user_id"] = $data->mobile_user_id;
                     
                     $mobile_user = DB::table('mobile_users')
@@ -1223,9 +1224,9 @@ class ApiController extends Controller
                     ->where('id','=', $data->mobile_user_id)
                     ->first();                    
                     
-                    $comdata["mobile_full_name"] = $mobile_user->full_name;
-                    $comdata["mobile_user_name"] = $mobile_user->user_name;
-                    $comdata["mobile_email"] = $mobile_user->email;
+                    $comdata["mobile_full_name"] = (!empty($mobile_user->full_name)) ? $mobile_user->full_name : " ";
+                    $comdata["mobile_user_name"] = (!empty($mobile_user->user_name)) ? $mobile_user->user_name : " ";
+                    $comdata["mobile_email"] = (!empty($mobile_user->email)) ? $mobile_user->email : " ";
                     if(empty($mobile_user->profile_picture) || $mobile_user->profile_picture == " " || $mobile_user->profile_picture =="" ){
                         $comdata["mobile_profile_picture"] = "";  
                     } else
@@ -1252,6 +1253,7 @@ class ApiController extends Controller
                     $comdata["id"] = $data->id;
                     $comdata["review_id"] = $data->review_id;
                     $comdata["content"] = $data->content; 
+                    $comdata["created_at"] = $data->created_at; 
                     $comdata["mobile_user_id"] = $data->mobile_user_id;
 
                     $mobile_user = DB::table('mobile_users')
@@ -1259,14 +1261,14 @@ class ApiController extends Controller
                                             ->where('id','=', $data->mobile_user_id)
                                             ->first();                                            
                                             
-                                 $comdata["mobile_full_name"] = $mobile_user->full_name;
-                                 $comdata["mobile_user_name"] = $mobile_user->user_name;
-                                $comdata["mobile_email"] = $mobile_user->email;
-                                    if(empty($mobile_user->profile_picture) || $mobile_user->profile_picture == " " || $mobile_user->profile_picture =="" ){
-                                            $comdata["mobile_profile_picture"] = "";  
-                                    } else
-                                            $comdata["mobile_profile_picture"] =  env('APP_URL')."/". str_replace("/var/www/html/review/public/","",$mobile_user->profile_picture) ;
-
+                        $comdata["mobile_full_name"] = (!empty($mobile_user->full_name)) ? $mobile_user->full_name : " ";
+                        $comdata["mobile_user_name"] = (!empty($mobile_user->user_name)) ? $mobile_user->user_name : " ";
+                        $comdata["mobile_email"] = (!empty($mobile_user->email)) ? $mobile_user->email : " ";
+                            if(empty($mobile_user->profile_picture) || $mobile_user->profile_picture == " " || $mobile_user->profile_picture =="" ){
+                                $comdata["mobile_profile_picture"] = "";  
+                            } else
+                                $comdata["mobile_profile_picture"] =  env('APP_URL')."/". str_replace("/var/www/html/review/public/","",$mobile_user->profile_picture) ;
+                        
                     $comdata["com_likes_count"] = comments_likes::where('comment_id',$data->id)->count();
                     $comdata["com_likes_status"] = comments_likes::where('comment_id',$data->id)->where('mobile_user_id',$user_id)->count();
                     $comdata["com_agree_count"] = agree_comments::where('comment_id',$data->id)->count();
@@ -1285,23 +1287,23 @@ class ApiController extends Controller
                                         { 
                                             $comdata["id"] = $data->id;
                                             $comdata["review_id"] = $data->review_id;
+                                            $comdata["created_at"] = $data->created_at;                                             
                                             $comdata["content"] = $data->content; 
                                             $comdata["mobile_user_id"] = $data->mobile_user_id;
 
                                             $mobile_user = DB::table('mobile_users')
                                             ->select('id', 'full_name', 'user_name', 'email','profile_picture')
                                             ->where('id','=', $data->mobile_user_id)
-                                            ->first();
+                                            ->first();                                            
                                             
-                                            
-                                            $comdata["mobile_full_name"] = $mobile_user->full_name;
-                                            $comdata["mobile_user_name"] = $mobile_user->user_name;
-                                            $comdata["mobile_email"] = $mobile_user->email;
-                                            if(empty($mobile_user->profile_picture) || $mobile_user->profile_picture == " " || $mobile_user->profile_picture =="" ){
-                                                $comdata["mobile_profile_picture"] = "";  
-                                            } else
-                                                $comdata["mobile_profile_picture"] =  env('APP_URL')."/". str_replace("/var/www/html/review/public/","",$mobile_user->profile_picture) ;
-
+                                            $comdata["mobile_full_name"] = (!empty($mobile_user->full_name)) ? $mobile_user->full_name : " ";
+                                            $comdata["mobile_user_name"] = (!empty($mobile_user->user_name)) ? $mobile_user->user_name : " ";
+                                            $comdata["mobile_email"] = (!empty($mobile_user->email)) ? $mobile_user->email : " ";
+                                                if(empty($mobile_user->profile_picture) || $mobile_user->profile_picture == " " || $mobile_user->profile_picture =="" ){
+                                                    $comdata["mobile_profile_picture"] = "";  
+                                                } else
+                                                    $comdata["mobile_profile_picture"] =  env('APP_URL')."/". str_replace("/var/www/html/review/public/","",$mobile_user->profile_picture) ;
+                                          
                                             $comdata["com_likes_count"] = comments_likes::where('comment_id',$data->id)->count();
                                             $comdata["com_likes_status"] = comments_likes::where('comment_id',$data->id)->where('mobile_user_id',$user_id)->count();
                                             $comdata["com_agree_count"] = agree_comments::where('comment_id',$data->id)->count();
@@ -1314,6 +1316,7 @@ class ApiController extends Controller
                                                     $subcomdata["subcom_id"] = $subdata->id;
                                                     $subcomdata["review_id"] = $subdata->review_id;
                                                     $subcomdata["content"] = $subdata->content; 
+                                                    $subcomdata["created_at"] = $data->created_at;  
                                                     $subcomdata["mobile_user_id"] = $subdata->mobile_user_id;
                                                     
                                                         $mobile_user = DB::table('mobile_users')
@@ -1322,9 +1325,9 @@ class ApiController extends Controller
                                                         ->first();
                                                         
                                                         
-                                                        $subcomdata["mobile_full_name"] = $mobile_user->full_name;
-                                                        $subcomdata["mobile_user_name"] = $mobile_user->user_name;
-                                                        $subcomdata["mobile_email"] = $mobile_user->email;
+                                                        $subcomdata["mobile_full_name"] =(!empty($mobile_user->full_name)) ? $mobile_user->full_name : " ";
+                                                        $subcomdata["mobile_user_name"] = (!empty($mobile_user->user_name)) ? $mobile_user->user_name : " ";
+                                                        $subcomdata["mobile_email"] = (!empty($mobile_user->email)) ? $mobile_user->email : " ";
                                                         if(empty($mobile_user->profile_picture) || $mobile_user->profile_picture == " " || $mobile_user->profile_picture =="" ){
                                                             $subcomdata["mobile_profile_picture"] = "";  
                                                         } else
