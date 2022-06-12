@@ -74,6 +74,9 @@ Route::post('mobileUser/users_liked_post', 'App\Http\Controllers\ApiController@u
 // api check whether the current post is liked by the user or not.
 Route::post('mobileUser/check_user_likepost', 'App\Http\Controllers\ApiController@check_user_likepost');
 
+
+// api for view the comments of the posts.
+Route::post('mobileUser/view_the_post_comment', 'App\Http\Controllers\ApiController@view_the_post_comment');
 // api for liking/delete the comments.
 Route::post('mobileUser/create_del_the_comment', 'App\Http\Controllers\ApiController@create_del_the_comment');
 // api for liking/delete the comments.
