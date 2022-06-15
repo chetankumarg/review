@@ -1190,6 +1190,144 @@ class ApiController extends Controller
 
     }
 
+    public function view_the_post_comment_mod(Request $request){
+        $post_id = $request->post_id;
+        $user_id = $request->mobile_user_id;
+        // $comdata = array();
+
+        $recom_like_ids = array();
+        
+        $like_result_id = DB::select( DB::raw("SELECT c.id from `comments` c LEFT JOIN `comments_likes` p ON c.id = p.comment_id WHERE c.review_id = :review_id 
+        GROUP BY c.id order by c.created_at desc limit 1"), array(
+            'review_id' =>  $post_id,
+          ));
+
+        $agree_result_id = DB::select( DB::raw("SELECT c.id from `comments` c LEFT JOIN `comments_likes` p ON c.id = p.comment_id WHERE c.review_id = :review_id 
+        GROUP BY c.id order by c.created_at desc limit 1"), array(
+              'review_id' =>  $post_id,
+        ));  
+
+        if(!empty($like_result_id)){
+            foreach($like_result_id as $res){
+                $recom_like_ids[] = $res->id;
+                // $most_comment_id["id"] = $res->id;
+                $comments_likes = Comment::where('id','=',$res->id)->where('review_id','=', $post_id)->orderBy('created_at', 'desc')->get();
+                foreach($comments_likes as $data)
+                { 
+                    $comdata["id"] = $data->id;
+                    $comdata["review_id"] = $data->review_id;
+                    $comdata["content"] = $data->content; 
+                    $comdata["created_at"] = $data->created_at; 
+                    $comdata["mobile_user_id"] = $data->mobile_user_id;
+                    
+                    $mobile_user = DB::table('mobile_users')
+                    ->select('id', 'full_name', 'user_name', 'email','profile_picture')
+                    ->where('id','=', $data->mobile_user_id)
+                    ->first();                    
+                    
+                    $comdata["mobile_full_name"] = (!empty($mobile_user->full_name)) ? $mobile_user->full_name : " ";
+                    $comdata["mobile_user_name"] = (!empty($mobile_user->user_name)) ? $mobile_user->user_name : " ";
+                    $comdata["mobile_email"] = (!empty($mobile_user->email)) ? $mobile_user->email : " ";
+                    if(empty($mobile_user->profile_picture) || $mobile_user->profile_picture == " " || $mobile_user->profile_picture =="" ){
+                        $comdata["mobile_profile_picture"] = "";  
+                    } else
+                        $comdata["mobile_profile_picture"] =  env('APP_URL')."/". str_replace("/var/www/html/review/public/","",$mobile_user->profile_picture) ;
+
+                    $comdata["com_likes_count"] = comments_likes::where('comment_id',$data->id)->count();
+                    $comdata["com_likes_status"] = comments_likes::where('comment_id',$data->id)->where('mobile_user_id',$user_id)->count();
+                    $comdata["com_agree_count"] = agree_comments::where('comment_id',$data->id)->count();
+                    $comdata["com_agree_status"] = agree_comments::where('comment_id',$data->id)->where('mobile_user_id',$user_id)->count();
+                    $com_like_contianer[] = $comdata;
+                }  
+        
+            }
+        }else{
+            $com_like_contianer = "No Top Recommended Comments";
+        }
+
+        if(!empty($agree_result_id)){
+            foreach($agree_result_id as $res){
+                // $most_comment_id["id"] = $res->id;
+                $recom_like_ids[] = $res->id;
+                $comments_likes = Comment::where('id','=',$res->id)->where('review_id','=', $post_id)->orderBy('created_at', 'desc')->get();
+                foreach($comments_likes as $data)
+                { 
+                    $comdata["id"] = $data->id;
+                    $comdata["review_id"] = $data->review_id;
+                    $comdata["content"] = $data->content; 
+                    $comdata["created_at"] = $data->created_at; 
+                    $comdata["mobile_user_id"] = $data->mobile_user_id;
+
+                    $mobile_user = DB::table('mobile_users')
+                                            ->select('id', 'full_name', 'user_name', 'email','profile_picture')
+                                            ->where('id','=', $data->mobile_user_id)
+                                            ->first();                                            
+                                            
+                        $comdata["mobile_full_name"] = (!empty($mobile_user->full_name)) ? $mobile_user->full_name : " ";
+                        $comdata["mobile_user_name"] = (!empty($mobile_user->user_name)) ? $mobile_user->user_name : " ";
+                        $comdata["mobile_email"] = (!empty($mobile_user->email)) ? $mobile_user->email : " ";
+                            if(empty($mobile_user->profile_picture) || $mobile_user->profile_picture == " " || $mobile_user->profile_picture =="" ){
+                                $comdata["mobile_profile_picture"] = "";  
+                            } else
+                                $comdata["mobile_profile_picture"] =  env('APP_URL')."/". str_replace("/var/www/html/review/public/","",$mobile_user->profile_picture) ;
+                        
+                    $comdata["com_likes_count"] = comments_likes::where('comment_id',$data->id)->count();
+                    $comdata["com_likes_status"] = comments_likes::where('comment_id',$data->id)->where('mobile_user_id',$user_id)->count();
+                    $comdata["com_agree_count"] = agree_comments::where('comment_id',$data->id)->count();
+                    $comdata["com_agree_status"] = agree_comments::where('comment_id',$data->id)->where('mobile_user_id',$user_id)->count();
+                    $com_agree_contianer[] = $comdata;
+                }  
+        
+            }
+        }else{
+            $com_agree_contianer = "No Agree Comment";
+        }
+          
+        $comments = Comment::where('review_id','=', $post_id)->whereNotIn('id',$recom_like_ids)->orderBy('created_at', 'desc')->get();
+
+        $Comments_Count = count($comments);
+        if($Comments_Count > 0){
+        foreach($comments as $data)
+                                        { 
+                                            $comdata["id"] = $data->id;
+                                            $comdata["review_id"] = $data->review_id;
+                                            $comdata["created_at"] = $data->created_at;                                             
+                                            $comdata["content"] = $data->content; 
+                                            $comdata["mobile_user_id"] = $data->mobile_user_id;
+
+                                            $mobile_user = DB::table('mobile_users')
+                                            ->select('id', 'full_name', 'user_name', 'email','profile_picture')
+                                            ->where('id','=', $data->mobile_user_id)
+                                            ->first();                                            
+                                            
+                                            $comdata["mobile_full_name"] = (!empty($mobile_user->full_name)) ? $mobile_user->full_name : " ";
+                                            $comdata["mobile_user_name"] = (!empty($mobile_user->user_name)) ? $mobile_user->user_name : " ";
+                                            $comdata["mobile_email"] = (!empty($mobile_user->email)) ? $mobile_user->email : " ";
+                                                if(empty($mobile_user->profile_picture) || $mobile_user->profile_picture == " " || $mobile_user->profile_picture =="" ){
+                                                    $comdata["mobile_profile_picture"] = "";  
+                                                } else
+                                                    $comdata["mobile_profile_picture"] =  env('APP_URL')."/". str_replace("/var/www/html/review/public/","",$mobile_user->profile_picture) ;
+                                          
+                                            $comdata["com_likes_count"] = comments_likes::where('comment_id',$data->id)->count();
+                                            $comdata["com_likes_status"] = comments_likes::where('comment_id',$data->id)->where('mobile_user_id',$user_id)->count();
+                                            $comdata["com_agree_count"] = agree_comments::where('comment_id',$data->id)->count();
+                                            $comdata["com_agree_status"] = agree_comments::where('comment_id',$data->id)->where('mobile_user_id',$user_id)->count();
+                                            $comcontianer[] = $comdata;
+                                        }    
+
+                                }else{
+                                    $comcontianer = "No Comments is there";
+                                }                          
+        return response()->json([
+            "status" => true,
+            "post_id" => $post_id,
+            "user_id" => $user_id,
+            "most_comment_agree" => $com_agree_contianer,
+            "most_comments_likes" => $com_like_contianer,
+            "comment_data" => $comcontianer
+        ], 200); 
+    }
+
     public function view_the_post_comment(Request $request){
         $post_id = $request->post_id;
         $user_id = $request->mobile_user_id;
