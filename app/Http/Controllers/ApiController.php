@@ -1196,20 +1196,19 @@ class ApiController extends Controller
         // $comdata = array();
 
         $recom_like_ids = array();
+        $most_like_id = array();
+        $comments_count = Comment::where('review_id','=',$post_id)->count();
+        if($comments_count > 5){
         
         $like_result_id = DB::select( DB::raw("SELECT c.id from `comments` c LEFT JOIN `comments_likes` p ON c.id = p.comment_id WHERE c.review_id = :review_id 
         GROUP BY c.id order by c.created_at desc limit 1"), array(
             'review_id' =>  $post_id,
           ));
 
-        $agree_result_id = DB::select( DB::raw("SELECT c.id from `comments` c LEFT JOIN `comments_likes` p ON c.id = p.comment_id WHERE c.review_id = :review_id 
-        GROUP BY c.id order by c.created_at desc limit 1"), array(
-              'review_id' =>  $post_id,
-        ));  
-
         if(!empty($like_result_id)){
             foreach($like_result_id as $res){
                 $recom_like_ids[] = $res->id;
+                $most_like_id[] = $res->id;
                 // $most_comment_id["id"] = $res->id;
                 $comments_likes = Comment::where('id','=',$res->id)->where('review_id','=', $post_id)->orderBy('created_at', 'desc')->get();
                 foreach($comments_likes as $data)
@@ -1237,19 +1236,25 @@ class ApiController extends Controller
                     $comdata["com_likes_status"] = comments_likes::where('comment_id',$data->id)->where('mobile_user_id',$user_id)->count();
                     $comdata["com_agree_count"] = agree_comments::where('comment_id',$data->id)->count();
                     $comdata["com_agree_status"] = agree_comments::where('comment_id',$data->id)->where('mobile_user_id',$user_id)->count();
+                    $comdata["com_reply_count"] = SubComment::where('comment_id',$data->id)->count();
                     $com_like_contianer[] = $comdata;
                 }  
         
             }
         }else{
-            $com_like_contianer = "No Top Recommended Comments";
+            $com_like_contianer = [];
         }
+
+        $agree_result_id = DB::select( DB::raw("SELECT c.id from `comments` c LEFT JOIN `sub_comments` p ON c.id = p.comment_id WHERE c.review_id = :review_id 
+        GROUP BY c.id order by c.created_at desc limit 1,1"), array(
+              'review_id' =>  $post_id,
+        ));  
 
         if(!empty($agree_result_id)){
             foreach($agree_result_id as $res){
                 // $most_comment_id["id"] = $res->id;
                 $recom_like_ids[] = $res->id;
-                $comments_likes = Comment::where('id','=',$res->id)->where('review_id','=', $post_id)->orderBy('created_at', 'desc')->get();
+                $comments_likes = Comment::where('id','=',$res->id)->where('review_id','=', $post_id)->whereNotIn('id',$most_like_id)->orderBy('created_at', 'desc')->get();
                 foreach($comments_likes as $data)
                 { 
                     $comdata["id"] = $data->id;
@@ -1275,14 +1280,19 @@ class ApiController extends Controller
                     $comdata["com_likes_status"] = comments_likes::where('comment_id',$data->id)->where('mobile_user_id',$user_id)->count();
                     $comdata["com_agree_count"] = agree_comments::where('comment_id',$data->id)->count();
                     $comdata["com_agree_status"] = agree_comments::where('comment_id',$data->id)->where('mobile_user_id',$user_id)->count();
+                    $comdata["com_reply_count"] = SubComment::where('comment_id',$data->id)->count();
                     $com_agree_contianer[] = $comdata;
                 }  
         
             }
         }else{
-            $com_agree_contianer = "No Agree Comment";
+            $com_agree_contianer = [];
         }
-          
+        }else{
+            $com_agree_contianer = [];
+            $com_like_contianer = [];
+            $recom_like_ids[]= '';
+        } 
         $comments = Comment::where('review_id','=', $post_id)->whereNotIn('id',$recom_like_ids)->orderBy('created_at', 'desc')->get();
 
         $Comments_Count = count($comments);
@@ -1312,18 +1322,19 @@ class ApiController extends Controller
                                             $comdata["com_likes_status"] = comments_likes::where('comment_id',$data->id)->where('mobile_user_id',$user_id)->count();
                                             $comdata["com_agree_count"] = agree_comments::where('comment_id',$data->id)->count();
                                             $comdata["com_agree_status"] = agree_comments::where('comment_id',$data->id)->where('mobile_user_id',$user_id)->count();
+                                            $comdata["com_reply_count"] = SubComment::where('comment_id',$data->id)->count();
                                             $comcontianer[] = $comdata;
                                         }    
 
                                 }else{
-                                    $comcontianer = "No Comments is there";
+                                    $comcontianer = [];
                                 }                          
         return response()->json([
             "status" => true,
             "post_id" => $post_id,
             "user_id" => $user_id,
-            "most_comment_agree" => $com_agree_contianer,
-            "most_comments_likes" => $com_like_contianer,
+            "top_recommended_comment" => $com_agree_contianer,
+            "top_liked_comment" => $com_like_contianer,
             "comment_data" => $comcontianer
         ], 200); 
     }
