@@ -1209,6 +1209,7 @@ class ApiController extends Controller
             foreach($like_result_id as $res){
                 $recom_like_ids[] = $res->id;
                 $most_like_id[] = $res->id;
+                $liked_id = $res->id;
                 // $most_comment_id["id"] = $res->id;
                 $comments_likes = Comment::where('id','=',$res->id)->where('review_id','=', $post_id)->orderBy('created_at', 'desc')->get();
                 foreach($comments_likes as $data)
@@ -1245,10 +1246,13 @@ class ApiController extends Controller
             $com_like_contianer = [];
         }
 
-        $agree_result_id = DB::select( DB::raw("SELECT c.id from `comments` c LEFT JOIN `sub_comments` p ON c.id = p.comment_id WHERE c.review_id = :review_id 
+        $agree_result_id = DB::select( DB::raw("SELECT c.id from `comments` c LEFT JOIN `sub_comments` p ON c.id = p.comment_id WHERE c.review_id = :review_id and not c.id = :liked_id 
         GROUP BY c.id order by c.created_at desc limit 1,1"), array(
               'review_id' =>  $post_id,
+              'liked_id' => $liked_id
+            
         ));  
+        //echo implode("",$most_like_id);
 
         if(!empty($agree_result_id)){
             foreach($agree_result_id as $res){
