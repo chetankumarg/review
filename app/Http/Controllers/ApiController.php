@@ -1343,6 +1343,52 @@ class ApiController extends Controller
         ], 200); 
     }
 
+    public function view_the_post_sub_comment(Request $request){
+
+        $post_id = $request->post_id;
+        $user_id = $request->mobile_user_id;
+
+        $Subcomments = SubComment::where('comment_id','=', $post_id)->get();
+                                            $SubComments_Count = count($Subcomments);
+                                            if($SubComments_Count > 0){
+                                                foreach($Subcomments as $subdata){
+                                                    $subcomdata["comment_id"] = $post_id;
+                                                    $subcomdata["subcom_id"] = $subdata->id;
+                                                    $subcomdata["review_id"] = $subdata->review_id;
+                                                    $subcomdata["content"] = $subdata->content; 
+                                                    $subcomdata["created_at"] = $data->created_at;  
+                                                    $subcomdata["mobile_user_id"] = $subdata->mobile_user_id;
+                                                    
+                                                        $mobile_user = DB::table('mobile_users')
+                                                        ->select('id', 'full_name', 'user_name', 'email','profile_picture')
+                                                        ->where('id','=', $subdata->mobile_user_id)
+                                                        ->first();
+                                                        
+                                                        
+                                                        $subcomdata["mobile_full_name"] =(!empty($mobile_user->full_name)) ? $mobile_user->full_name : " ";
+                                                        $subcomdata["mobile_user_name"] = (!empty($mobile_user->user_name)) ? $mobile_user->user_name : " ";
+                                                        $subcomdata["mobile_email"] = (!empty($mobile_user->email)) ? $mobile_user->email : " ";
+                                                        if(empty($mobile_user->profile_picture) || $mobile_user->profile_picture == " " || $mobile_user->profile_picture =="" ){
+                                                            $subcomdata["mobile_profile_picture"] = "";  
+                                                        } else
+                                                            $subcomdata["mobile_profile_picture"] =  env('APP_URL')."/". str_replace("/var/www/html/review/public/","",$mobile_user->profile_picture) ;
+
+                                                    $subcomdata["subcom_likes_count"] = subcomments_likes::where('subcomment_id',$subdata->id)->count();
+                                                    $subcomdata["subcom_likes_status"] = subcomments_likes::where('subcomment_id',$subdata->id)->where('mobile_user_id',$user_id)->count();
+                                                    $subcomdata["subcom_agree_count"] = agree_subcomments::where('subcomment_id',$subdata->id)->count();
+                                                    $subcomdata["subcom_agree_status"] = agree_subcomments::where('subcomment_id',$subdata->id)->where('mobile_user_id',$user_id)->count();
+                                                    $subcomcontianer[] = $subcomdata;
+                                                }
+                                            }else{
+                                                $subcomcontianer = [];
+                                            }
+                        return response()->json([
+                                                "status" => true,
+                                                "post_id" => $post_id,
+                                                "user_id" => $user_id,
+                                                "sub_comments" => $subcomcontianer
+                                            ], 200);                         
+    }
     public function view_the_post_comment(Request $request){
         $post_id = $request->post_id;
         $user_id = $request->mobile_user_id;

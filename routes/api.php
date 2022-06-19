@@ -80,6 +80,8 @@ Route::post('mobileUser/view_the_post_comment', 'App\Http\Controllers\ApiControl
 
 // api for view the comments of the posts.
 Route::post('mobileUser/view_the_post_comment_mod', 'App\Http\Controllers\ApiController@view_the_post_comment_mod');
+// Api for viewing the sub-comments..
+Route::post('mobileUser/view_the_post_sub_comment', 'App\Http\Controllers\ApiController@view_the_post_sub_comment');
 
 // api for liking/delete the comments.
 Route::post('mobileUser/create_del_the_comment', 'App\Http\Controllers\ApiController@create_del_the_comment');
