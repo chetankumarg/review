@@ -1356,7 +1356,7 @@ class ApiController extends Controller
                                                     $subcomdata["subcom_id"] = $subdata->id;
                                                     $subcomdata["review_id"] = $subdata->review_id;
                                                     $subcomdata["content"] = $subdata->content; 
-                                                    $subcomdata["created_at"] = $data->created_at;  
+                                                    $subcomdata["created_at"] = $subdata->created_at;  
                                                     $subcomdata["mobile_user_id"] = $subdata->mobile_user_id;
                                                     
                                                         $mobile_user = DB::table('mobile_users')
