@@ -1193,6 +1193,8 @@ class ApiController extends Controller
     public function view_the_post_comment_mod(Request $request){
         $post_id = $request->post_id;
         $user_id = $request->mobile_user_id;
+        $start = (!empty($request->start)) ? $request->start - 1 : 0;
+        $end = (!empty($request->end)) ? $request->end - 1 : 10;
         // $comdata = array();
 
         $recom_like_ids = array();
@@ -1217,7 +1219,7 @@ class ApiController extends Controller
                     $comdata["id"] = $data->id;
                     $comdata["review_id"] = $data->review_id;
                     $comdata["content"] = $data->content; 
-                    $comdata["created_at"] = $data->created_at; 
+                    $comdata["created_at"] = $data->created_at->diffForHumans(); 
                     $comdata["mobile_user_id"] = $data->mobile_user_id;
                     
                     $mobile_user = DB::table('mobile_users')
@@ -1264,7 +1266,7 @@ class ApiController extends Controller
                     $comdata["id"] = $data->id;
                     $comdata["review_id"] = $data->review_id;
                     $comdata["content"] = $data->content; 
-                    $comdata["created_at"] = $data->created_at; 
+                    $comdata["created_at"] = $data->created_at->diffForHumans(); 
                     $comdata["mobile_user_id"] = $data->mobile_user_id;
 
                     $mobile_user = DB::table('mobile_users')
@@ -1297,7 +1299,9 @@ class ApiController extends Controller
             $com_like_contianer = [];
             $recom_like_ids[]= '';
         } 
-        $comments = Comment::where('review_id','=', $post_id)->whereNotIn('id',$recom_like_ids)->orderBy('created_at', 'desc')->get();
+        $comments = Comment::where('review_id','=', $post_id)->whereNotIn('id',$recom_like_ids)->orderBy('created_at', 'desc')
+        ->skip($start)
+        ->take($end)->get();
 
         $Comments_Count = count($comments);
         if($Comments_Count > 0){
@@ -1305,7 +1309,7 @@ class ApiController extends Controller
                                         { 
                                             $comdata["id"] = $data->id;
                                             $comdata["review_id"] = $data->review_id;
-                                            $comdata["created_at"] = $data->created_at;                                             
+                                            $comdata["created_at"] = $data->created_at->diffForHumans();                                             
                                             $comdata["content"] = $data->content; 
                                             $comdata["mobile_user_id"] = $data->mobile_user_id;
 
@@ -1348,7 +1352,12 @@ class ApiController extends Controller
         $post_id = $request->post_id;
         $user_id = $request->mobile_user_id;
 
-        $Subcomments = SubComment::where('comment_id','=', $post_id)->get();
+        $start = (!empty($request->start)) ? $request->start - 1 : 0;
+        $end = (!empty($request->end)) ? $request->end - 1 : 10;
+
+        $Subcomments = SubComment::where('comment_id','=', $post_id)
+        ->skip($start)
+        ->take($end)->get();
                                             $SubComments_Count = count($Subcomments);
                                             if($SubComments_Count > 0){
                                                 foreach($Subcomments as $subdata){
@@ -1356,7 +1365,7 @@ class ApiController extends Controller
                                                     $subcomdata["subcom_id"] = $subdata->id;
                                                     $subcomdata["review_id"] = $subdata->review_id;
                                                     $subcomdata["content"] = $subdata->content; 
-                                                    $subcomdata["created_at"] = $subdata->created_at;  
+                                                    $subcomdata["created_at"] = $subdata->created_at->diffForHumans();  
                                                     $subcomdata["mobile_user_id"] = $subdata->mobile_user_id;
                                                     
                                                         $mobile_user = DB::table('mobile_users')
@@ -1575,11 +1584,43 @@ class ApiController extends Controller
                 $Comment->mobile_user_id = $request->mobile_user_id;
                 $Comment->content = $request->content;
                 $Comment->save();
+                $commnet_id = $Comment->id;
+
+                $comments = Comment::where('id','=',$commnet_id)->get();
+                foreach($comments as $data)
+                { 
+                    $comdata["id"] = $data->id;
+                    $comdata["review_id"] = $data->review_id;
+                    $comdata["content"] = $data->content; 
+                    $comdata["created_at"] = $data->created_at->diffForHumans(); 
+                    $comdata["mobile_user_id"] = $data->mobile_user_id;
+
+                    $mobile_user = DB::table('mobile_users')
+                                            ->select('id', 'full_name', 'user_name', 'email','profile_picture')
+                                            ->where('id','=', $data->mobile_user_id)
+                                            ->first();                                            
+                                            
+                        $comdata["mobile_full_name"] = (!empty($mobile_user->full_name)) ? $mobile_user->full_name : " ";
+                        $comdata["mobile_user_name"] = (!empty($mobile_user->user_name)) ? $mobile_user->user_name : " ";
+                        $comdata["mobile_email"] = (!empty($mobile_user->email)) ? $mobile_user->email : " ";
+                            if(empty($mobile_user->profile_picture) || $mobile_user->profile_picture == " " || $mobile_user->profile_picture =="" ){
+                                $comdata["mobile_profile_picture"] = "";  
+                            } else
+                                $comdata["mobile_profile_picture"] =  env('APP_URL')."/". str_replace("/var/www/html/review/public/","",$mobile_user->profile_picture) ;
+                        
+                    $comdata["com_likes_count"] = comments_likes::where('comment_id',$data->id)->count();
+                    $comdata["com_likes_status"] = comments_likes::where('comment_id',$data->id)->where('mobile_user_id',$user_id)->count();
+                    $comdata["com_agree_count"] = agree_comments::where('comment_id',$data->id)->count();
+                    $comdata["com_agree_status"] = agree_comments::where('comment_id',$data->id)->where('mobile_user_id',$user_id)->count();
+                    $comdata["com_reply_count"] = SubComment::where('comment_id',$data->id)->count();
+                    $com_data[] = $comdata;
+                } 
 
                 if($Comment){
                     return response()->json([
                         "status" => true,
-                        "message" => "You have Created the Comment"
+                        "message" => "You have Created the Comment",
+                        "data" =>  $com_data
                     ], 200);
                 }else{
                     return response()->json([
