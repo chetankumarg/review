@@ -1348,9 +1348,14 @@ class ApiController extends Controller
 
                                 }else{
                                     $comcontianer = [];
-                                }                          
+                                }  
+                if(($com_agree_contianer == []) && ($com_like_contianer ==[]) && ($comcontianer ==[])){
+                    $status = "false";
+                }else{
+                    $status = "true";
+                }                                        
         return response()->json([
-            "status" => true,
+            "status" => $status,
             "post_id" => $post_id,
             "user_id" => $user_id,
             "top_recommended_comment" => $com_agree_contianer,
