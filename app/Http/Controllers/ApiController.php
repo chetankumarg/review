@@ -1680,6 +1680,40 @@ class ApiController extends Controller
                 $Comment->content = $request->content;
                 $Comment->save();
 
+                $subcommnet_id = $Comment->id;
+
+                $comments = SubComment::where('id','=',$subcommnet_id)->get();
+                foreach($comments as $data)
+                { 
+                    $comdata["id"] = $data->id;
+                    $comdata["comment_id"] = $data->comment_id;
+                    $comdata["review_id"] = $data->review_id;
+                    $comdata["content"] = $data->content; 
+                    $comdata["created_at"] = $data->created_at->diffForHumans(); 
+                    $comdata["mobile_user_id"] = $data->mobile_user_id;
+
+                    $mobile_user = DB::table('mobile_users')
+                                            ->select('id', 'full_name', 'user_name', 'email','profile_picture')
+                                            ->where('id','=', $data->mobile_user_id)
+                                            ->first();                                            
+                                            
+                        $comdata["mobile_full_name"] = (!empty($mobile_user->full_name)) ? $mobile_user->full_name : " ";
+                        $comdata["mobile_user_name"] = (!empty($mobile_user->user_name)) ? $mobile_user->user_name : " ";
+                        $comdata["mobile_email"] = (!empty($mobile_user->email)) ? $mobile_user->email : " ";
+                            if(empty($mobile_user->profile_picture) || $mobile_user->profile_picture == " " || $mobile_user->profile_picture =="" ){
+                                $comdata["mobile_profile_picture"] = "";  
+                            } else
+                                $comdata["mobile_profile_picture"] =  env('APP_URL')."/". str_replace("/var/www/html/review/public/","",$mobile_user->profile_picture) ;
+                        
+                    $comdata["com_likes_count"] = subcomments_likes::where('subcomment_id',$data->id)->count();
+                    $comdata["com_likes_status"] = subcomments_likes::where('subcomment_id',$data->id)->where('mobile_user_id',$user_id)->count();
+                    $comdata["com_agree_count"] = agree_subcomments::where('subcomment_id',$data->id)->count();
+                    $comdata["com_agree_status"] = agree_subcomments::where('subcomment_id',$data->id)->where('mobile_user_id',$user_id)->count();
+                  //  $comdata["com_reply_count"] = SubComment::where('comment_id',$data->id)->count();
+                    $com_data[] = $comdata;
+                } 
+
+
                 if($Comment){
                     return response()->json([
                         "status" => true,
