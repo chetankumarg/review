@@ -1404,12 +1404,14 @@ class ApiController extends Controller
                                                     $subcomdata["subcom_agree_count"] = agree_subcomments::where('subcomment_id',$subdata->id)->count();
                                                     $subcomdata["subcom_agree_status"] = agree_subcomments::where('subcomment_id',$subdata->id)->where('mobile_user_id',$user_id)->count();
                                                     $subcomcontianer[] = $subcomdata;
+                                                    $status = "true";
                                                 }
                                             }else{
                                                 $subcomcontianer = [];
+                                                $status = "false";
                                             }
                         return response()->json([
-                                                "status" => true,
+                                                "status" => $status,
                                                 "post_id" => $post_id,
                                                 "user_id" => $user_id,
                                                 "sub_comments" => $subcomcontianer
