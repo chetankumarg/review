@@ -1707,10 +1707,10 @@ class ApiController extends Controller
                             } else
                                 $comdata["mobile_profile_picture"] =  env('APP_URL')."/". str_replace("/var/www/html/review/public/","",$mobile_user->profile_picture) ;
                         
-                    $comdata["com_likes_count"] = subcomments_likes::where('subcomment_id',$data->id)->count();
-                    $comdata["com_likes_status"] = subcomments_likes::where('subcomment_id',$data->id)->where('mobile_user_id',$user_id)->count();
-                    $comdata["com_agree_count"] = agree_subcomments::where('subcomment_id',$data->id)->count();
-                    $comdata["com_agree_status"] = agree_subcomments::where('subcomment_id',$data->id)->where('mobile_user_id',$user_id)->count();
+                    $comdata["subcom_likes_count"] = subcomments_likes::where('subcomment_id',$data->id)->count();
+                    $comdata["subcom_likes_status"] = subcomments_likes::where('subcomment_id',$data->id)->where('mobile_user_id',$user_id)->count();
+                    $comdata["subcom_agree_count"] = agree_subcomments::where('subcomment_id',$data->id)->count();
+                    $comdata["subcom_agree_status"] = agree_subcomments::where('subcomment_id',$data->id)->where('mobile_user_id',$user_id)->count();
                   //  $comdata["com_reply_count"] = SubComment::where('comment_id',$data->id)->count();
                     $com_data[] = $comdata;
                 } 
@@ -1719,7 +1719,8 @@ class ApiController extends Controller
                 if($Comment){
                     return response()->json([
                         "status" => true,
-                        "message" => "You have Created the Sub-Comment"
+                        "message" => "You have Created the Sub-Comment",
+                        "sub_comments" => $com_data
                     ], 200);
                 }else{
                     return response()->json([
